@@ -6,6 +6,7 @@ using Infrastructures.Mappers;
 using Infrastructures.Repositories;
 using Infrastructures.Services;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,10 +37,13 @@ namespace Infrastructures
                         builder => builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
             }
 
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
             // this configuration just use in-memory for fast develop
             //services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase("test"));
 
             services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
+
+
 
             return services;
         }

@@ -20,7 +20,7 @@ namespace WebAPI.Tests
         {
             var service = new ServiceCollection();
             service.AddWebAPIService();
-            service.AddInfrastructuresService("mock");
+            //service.AddInfrastructuresService();
             service.AddDbContext<AppDbContext>(
                 option => option.UseInMemoryDatabase("test"));
             _serviceProvider = service.BuildServiceProvider();

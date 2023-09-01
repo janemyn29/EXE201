@@ -15,7 +15,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<Pagination<ChemicalViewModel>> GetChemicalPagingsion(int pageIndex = 0, int pageSize = 10)
+        public async Task<Pagination<ChemicalViewModel>> GetChemicalPagingsion(int pageIndex = 1, int pageSize = 10)
         {
             return await _chemicalService.GetChemicalPagingsionAsync(pageIndex, pageSize);
         }

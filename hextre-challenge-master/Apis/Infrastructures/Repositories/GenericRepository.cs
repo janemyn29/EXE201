@@ -69,11 +69,11 @@ namespace Infrastructures.Repositories
             _dbSet.UpdateRange(entities);
         }
 
-        public async Task<Pagination<TEntity>> ToPagination(int pageIndex = 0, int pageSize = 10)
+        public async Task<Pagination<TEntity>> ToPagination(int pageIndex = 1, int pageSize = 20)
         {
             var itemCount = await _dbSet.CountAsync();
             var items = await _dbSet.OrderByDescending(x => x.CreationDate)
-                                    .Skip(pageIndex * pageSize)
+                                    .Skip((pageIndex-1) * pageSize)
                                     .Take(pageSize)
                                     .AsNoTracking()
                                     .ToListAsync();
