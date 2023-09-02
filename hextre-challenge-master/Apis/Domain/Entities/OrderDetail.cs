@@ -10,19 +10,23 @@ namespace Domain.Entities
 {
     public class OrderDetail: BaseEntity
     {
-        [ForeignKey("Order")]
-        public Guid OrderId { get; set; }
         [ForeignKey("Warehouse")]
         public Guid WarehouseId { get; set; }
-
+        [ForeignKey("ApplicationUser")]
+        public string CustomerId { get; set; }
+        public bool ContactInDay { get; set; }
+        public int TotalCall { get; set; }
+        public OrderStatus OrderStatus { get; set; }
+        public Guid? CancelReasonId { get; set; }
         public Guid WarehouseDetailId { get; set;}
-        public double Price { get; set; }
+        public double WarehousePrice { get; set; }
+        public double ServicePrice { get; set; }
+        public double TotalPrice { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
         public UnitType UnitType { get; set; }
 
-
-        public virtual Order Order { get; set; }
         public virtual Warehouse Warehouse { get; set; }
+        public virtual ApplicationUser Customer { get; set; }
     }
 }
