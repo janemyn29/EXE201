@@ -4,6 +4,7 @@ using Infrastructures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230902191200_addBlog2")]
+    partial class addBlog2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,8 +41,9 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Birthday")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -229,74 +233,6 @@ namespace Infrastructures.Migrations
                     b.ToTable("Chemicals");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Contract", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ContractStatus")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("DeleteBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Deposit")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("File")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ModificationBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("ServicePrice")
-                        .HasColumnType("float");
-
-                    b.Property<string>("StaffId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("WarehousePrice")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Contract");
-                });
-
             modelBuilder.Entity("Domain.Entities.Feedback", b =>
                 {
                     b.Property<Guid>("Id")
@@ -434,9 +370,6 @@ namespace Infrastructures.Migrations
                     b.Property<Guid?>("CancelReasonId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("ContactInDay")
-                        .HasColumnType("bit");
-
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -463,9 +396,6 @@ namespace Infrastructures.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalCall")
                         .HasColumnType("int");
 
                     b.Property<double>("TotalPrice")
@@ -738,70 +668,6 @@ namespace Infrastructures.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Provider");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ServicePayment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("ContactedInDay")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("ContractId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Deadline")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeleteBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExtensionPeriod")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPaid")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ModificationBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MonthPayment")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PaymentType")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<int>("YearPayment")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContractId");
-
-                    b.ToTable("ServicePayment");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -1091,17 +957,6 @@ namespace Infrastructures.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Contract", b =>
-                {
-                    b.HasOne("Domain.Entities.ApplicationUser", "Customer")
-                        .WithMany("Contracts")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
             modelBuilder.Entity("Domain.Entities.Feedback", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser", "ApplicationUser")
@@ -1134,13 +989,13 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
-                    b.HasOne("Domain.Entities.ApplicationUser", "Customer")
+                    b.HasOne("Domain.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Domain.Entities.OrderDetail", b =>
@@ -1164,7 +1019,7 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
                 {
-                    b.HasOne("Domain.Entities.ApplicationUser", "Author")
+                    b.HasOne("Domain.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany("Posts")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1176,7 +1031,7 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Author");
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("PostCategory");
                 });
@@ -1198,17 +1053,6 @@ namespace Infrastructures.Migrations
                     b.Navigation("Hashtag");
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ServicePayment", b =>
-                {
-                    b.HasOne("Domain.Entities.Contract", "Contract")
-                        .WithMany("ServicePayments")
-                        .HasForeignKey("ContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contract");
                 });
 
             modelBuilder.Entity("Domain.Entities.Warehouse", b =>
@@ -1294,8 +1138,6 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("Contracts");
-
                     b.Navigation("Feedbacks");
 
                     b.Navigation("Orders");
@@ -1306,11 +1148,6 @@ namespace Infrastructures.Migrations
             modelBuilder.Entity("Domain.Entities.Category", b =>
                 {
                     b.Navigation("Warehouses");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Contract", b =>
-                {
-                    b.Navigation("ServicePayments");
                 });
 
             modelBuilder.Entity("Domain.Entities.Hashtag", b =>

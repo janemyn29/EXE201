@@ -13,10 +13,12 @@ namespace Domain.Entities
         [ForeignKey("ApplicationUser")]
         public string CustomerId { get; set; }
         public double TotalPrice { get; set; }
+        public bool ContactInDay { get; set; }
+        public int TotalCall { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public Guid? CancelReasonId { get; set; }
 
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual ApplicationUser Customer { get; set; }
         public IList<OrderDetail> OrderDetails { get;}
     }
 }

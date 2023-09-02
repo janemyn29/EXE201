@@ -13,9 +13,12 @@ namespace Domain.Entities
         public string Fullname { get; set; }
         public string Address { get; set; }
         public string Avatar { get; set; }
-        public string Birthday { get; set; }
+        public DateTime Birthday { get; set; }
+
         public IList<Feedback> Feedbacks { get; set; }
         public IList<Order> Orders { get; set; }
+        public IList<Post> Posts { get; set; }
+        public IList<Contract> Contracts { get; set; }
 
     }
 }
