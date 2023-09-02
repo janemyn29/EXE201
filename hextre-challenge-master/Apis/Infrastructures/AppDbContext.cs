@@ -14,6 +14,7 @@ namespace Infrastructures
 
         public DbSet<Chemical> Chemicals { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<CancelReason> CancelReason { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
