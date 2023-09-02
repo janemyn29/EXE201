@@ -18,7 +18,8 @@ namespace Domain.Entities
         public string Description { get; set; }
         public string ShortDescription { get; set; }
         public string LongitudeIP { get; set; }
-        public string latitudeIP { get; set; }
+        public string LatitudeIP { get; set; }
+        public bool IsDisplay { get; set; }
 
         public virtual Provider Provider { get; set; }
         public virtual Category Category { get; set; }

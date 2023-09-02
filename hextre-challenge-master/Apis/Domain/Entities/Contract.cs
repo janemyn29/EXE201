@@ -12,8 +12,6 @@ namespace Domain.Entities
     {
         [ForeignKey("ApplicationUser")]
         public string CustomerId { get; set; }
-        [ForeignKey("OrderDetail")]
-        public string OrderDetailId { get; set; }
         public string StaffId { get; set; }
         public DateTime  StartTime{ get; set; }
         public DateTime  EndTime{ get; set; }
@@ -24,13 +22,10 @@ namespace Domain.Entities
         public double TotalPrice { get; set; }
         public double Deposit { get; set; }
         public ContractStatus ContractStatus { get; set; }
-
-
+        public Guid OrderDetailId { get; set; }
 
         public IList<ServicePayment> ServicePayments { get; set; }
 
-
         public virtual ApplicationUser Customer { get; set; }
-        public virtual OrderDetail OrderDetail { get; set; }
     }
 }
