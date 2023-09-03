@@ -19,6 +19,7 @@ namespace Domain.Entities
         public IList<OrderDetail> OrderDetail { get; set; }
         public IList<Post> Posts { get; set; }
         public IList<Contract> Contracts { get; set; }
+        public IList<Request> Request { get; set; }
 
     }
 }

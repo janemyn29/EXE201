@@ -15,6 +15,7 @@ namespace Domain.Entities
         public string ShortDescription { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }
+        public bool  IsDisplay { get; set; }
 
         public IList<Warehouse> Warehouses { get; set; }
     }

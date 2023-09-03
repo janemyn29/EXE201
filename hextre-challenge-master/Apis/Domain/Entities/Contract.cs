@@ -12,7 +12,11 @@ namespace Domain.Entities
     {
         [ForeignKey("ApplicationUser")]
         public string CustomerId { get; set; }
+        [ForeignKey("RentWarehouse")]
+        public Guid RentWarehouseId { get; set; }
         public string StaffId { get; set; }
+        public Guid OrderDetailId { get; set; }
+        public Guid ProviderId { get; set; }
         public DateTime  StartTime{ get; set; }
         public DateTime  EndTime{ get; set; }
         public string  File{ get; set; }
@@ -20,12 +24,13 @@ namespace Domain.Entities
         public double ServicePrice { get; set; }
         public double WarehousePrice { get; set; }
         public double TotalPrice { get; set; }
-        public double Deposit { get; set; }
+        public double DepositFee { get; set; }
         public ContractStatus ContractStatus { get; set; }
-        public Guid OrderDetailId { get; set; }
+        
 
         public IList<ServicePayment> ServicePayments { get; set; }
 
         public virtual ApplicationUser Customer { get; set; }
+        public virtual RentWarehouse RentWarehouse { get; set; }
     }
 }
