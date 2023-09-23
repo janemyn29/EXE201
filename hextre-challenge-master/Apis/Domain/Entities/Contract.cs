@@ -15,7 +15,7 @@ namespace Domain.Entities
         [ForeignKey("RentWarehouse")]
         public Guid RentWarehouseId { get; set; }
         public string StaffId { get; set; }
-        public Guid OrderDetailId { get; set; }
+        public Guid OrderId { get; set; }
         public Guid ProviderId { get; set; }
         public DateTime  StartTime{ get; set; }
         public DateTime  EndTime{ get; set; }

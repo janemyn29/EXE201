@@ -16,7 +16,7 @@ namespace Domain.Entities
         public DateTime Birthday { get; set; }
 
         public IList<Feedback> Feedbacks { get; set; }
-        public IList<OrderDetail> OrderDetail { get; set; }
+        public IList<Order> OrderDetail { get; set; }
         public IList<Post> Posts { get; set; }
         public IList<Contract> Contracts { get; set; }
         public IList<Request> Request { get; set; }

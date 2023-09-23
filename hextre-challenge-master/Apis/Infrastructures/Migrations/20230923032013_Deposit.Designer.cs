@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230902214522_fixContract2")]
-    partial class fixContract2
+    [Migration("20230923032013_Deposit")]
+    partial class Deposit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -257,7 +257,7 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("Deposit")
+                    b.Property<double>("DepositFee")
                         .HasColumnType("float");
 
                     b.Property<string>("Description")
@@ -280,7 +280,13 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("OrderDetailId")
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProviderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RentWarehouseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("ServicePrice")
@@ -303,7 +309,51 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("CustomerId");
 
+                    b.HasIndex("RentWarehouseId");
+
                     b.ToTable("Contract");
+                });
+
+            modelBuilder.Entity("Domain.Entities.DepositPayment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("DepositPayments");
                 });
 
             modelBuilder.Entity("Domain.Entities.Feedback", b =>
@@ -355,6 +405,146 @@ namespace Infrastructures.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("Feedback");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Good", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GoodCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("GoodName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GoodUnit")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RentWarehouseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoodCategoryId");
+
+                    b.HasIndex("RentWarehouseId");
+
+                    b.ToTable("Good");
+                });
+
+            modelBuilder.Entity("Domain.Entities.GoodCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GoodCategory");
+                });
+
+            modelBuilder.Entity("Domain.Entities.GoodImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GoodId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoodId");
+
+                    b.ToTable("GoodImage");
                 });
 
             modelBuilder.Entity("Domain.Entities.Hashtag", b =>
@@ -434,7 +624,7 @@ namespace Infrastructures.Migrations
                     b.ToTable("ImageWarehouse");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OrderDetail", b =>
+            modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -461,6 +651,12 @@ namespace Infrastructures.Migrations
 
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<double>("Deposit")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Depth")
+                        .HasColumnType("float");
 
                     b.Property<double>("Height")
                         .HasColumnType("float");
@@ -492,9 +688,6 @@ namespace Infrastructures.Migrations
                     b.Property<Guid>("WarehouseDetailId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<double>("WarehousePrice")
                         .HasColumnType("float");
 
@@ -505,9 +698,9 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("WarehouseId");
+                    b.HasIndex("WarehouseDetailId");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
@@ -692,6 +885,9 @@ namespace Infrastructures.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsDisplay")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("ModificationBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -713,6 +909,152 @@ namespace Infrastructures.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Provider");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RentWarehouse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Information")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StaffId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RentWarehouse");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Request", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CompleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DenyReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RequestStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StaffId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Request");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RequestDetail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GoodId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoodId");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("RequestDetail");
                 });
 
             modelBuilder.Entity("Domain.Entities.ServicePayment", b =>
@@ -777,6 +1119,43 @@ namespace Infrastructures.Migrations
                     b.HasIndex("ContractId");
 
                     b.ToTable("ServicePayment");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Transaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PaymentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -905,6 +1284,9 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("Depth")
+                        .HasColumnType("float");
+
                     b.Property<double>("Height")
                         .HasColumnType("float");
 
@@ -919,6 +1301,9 @@ namespace Infrastructures.Migrations
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("UnitType")
                         .HasColumnType("int");
@@ -1077,6 +1462,29 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.RentWarehouse", "RentWarehouse")
+                        .WithMany("Contracts")
+                        .HasForeignKey("RentWarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("RentWarehouse");
+                });
+
+            modelBuilder.Entity("Domain.Entities.DepositPayment", b =>
+                {
+                    b.HasOne("Domain.Entities.ApplicationUser", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("Domain.Entities.Order", null)
+                        .WithMany("DepositPayments")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
                 });
 
@@ -1099,6 +1507,36 @@ namespace Infrastructures.Migrations
                     b.Navigation("Warehouse");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Good", b =>
+                {
+                    b.HasOne("Domain.Entities.GoodCategory", "GoodCategory")
+                        .WithMany("Goods")
+                        .HasForeignKey("GoodCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.RentWarehouse", "RentWarehouse")
+                        .WithMany("Goods")
+                        .HasForeignKey("RentWarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GoodCategory");
+
+                    b.Navigation("RentWarehouse");
+                });
+
+            modelBuilder.Entity("Domain.Entities.GoodImage", b =>
+                {
+                    b.HasOne("Domain.Entities.Good", "Good")
+                        .WithMany("GoodImages")
+                        .HasForeignKey("GoodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Good");
+                });
+
             modelBuilder.Entity("Domain.Entities.ImageWarehouse", b =>
                 {
                     b.HasOne("Domain.Entities.Warehouse", "Warehouse")
@@ -1110,7 +1548,7 @@ namespace Infrastructures.Migrations
                     b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OrderDetail", b =>
+            modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser", "Customer")
                         .WithMany("OrderDetail")
@@ -1118,15 +1556,15 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Warehouse", "Warehouse")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("WarehouseId")
+                    b.HasOne("Domain.Entities.WarehouseDetail", "WarehouseDetail")
+                        .WithMany()
+                        .HasForeignKey("WarehouseDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
 
-                    b.Navigation("Warehouse");
+                    b.Navigation("WarehouseDetail");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
@@ -1167,6 +1605,36 @@ namespace Infrastructures.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Request", b =>
+                {
+                    b.HasOne("Domain.Entities.ApplicationUser", "Customer")
+                        .WithMany("Request")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RequestDetail", b =>
+                {
+                    b.HasOne("Domain.Entities.Good", "Good")
+                        .WithMany()
+                        .HasForeignKey("GoodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Request", "Request")
+                        .WithMany("Details")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Good");
+
+                    b.Navigation("Request");
+                });
+
             modelBuilder.Entity("Domain.Entities.ServicePayment", b =>
                 {
                     b.HasOne("Domain.Entities.Contract", "Contract")
@@ -1176,6 +1644,17 @@ namespace Infrastructures.Migrations
                         .IsRequired();
 
                     b.Navigation("Contract");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Transaction", b =>
+                {
+                    b.HasOne("Domain.Entities.ServicePayment", "ServicePayment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ServicePayment");
                 });
 
             modelBuilder.Entity("Domain.Entities.Warehouse", b =>
@@ -1268,6 +1747,8 @@ namespace Infrastructures.Migrations
                     b.Navigation("OrderDetail");
 
                     b.Navigation("Posts");
+
+                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("Domain.Entities.Category", b =>
@@ -1280,9 +1761,24 @@ namespace Infrastructures.Migrations
                     b.Navigation("ServicePayments");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Good", b =>
+                {
+                    b.Navigation("GoodImages");
+                });
+
+            modelBuilder.Entity("Domain.Entities.GoodCategory", b =>
+                {
+                    b.Navigation("Goods");
+                });
+
             modelBuilder.Entity("Domain.Entities.Hashtag", b =>
                 {
                     b.Navigation("PostHashtags");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Order", b =>
+                {
+                    b.Navigation("DepositPayments");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
@@ -1300,13 +1796,23 @@ namespace Infrastructures.Migrations
                     b.Navigation("Warehouses");
                 });
 
+            modelBuilder.Entity("Domain.Entities.RentWarehouse", b =>
+                {
+                    b.Navigation("Contracts");
+
+                    b.Navigation("Goods");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Request", b =>
+                {
+                    b.Navigation("Details");
+                });
+
             modelBuilder.Entity("Domain.Entities.Warehouse", b =>
                 {
                     b.Navigation("Feedbacks");
 
                     b.Navigation("ImageWarehouses");
-
-                    b.Navigation("OrderDetails");
 
                     b.Navigation("WarehouseDetails");
                 });

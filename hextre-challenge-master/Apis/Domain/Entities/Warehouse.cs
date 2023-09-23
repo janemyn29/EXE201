@@ -27,7 +27,6 @@ namespace Domain.Entities
         public IList<ImageWarehouse> ImageWarehouses { get; set; }
         public IList<WarehouseDetail> WarehouseDetails { get; set; }
         public IList<Feedback> Feedbacks { get; set; }
-        public IList<OrderDetail> OrderDetails { get; set; }
 
     }
 }

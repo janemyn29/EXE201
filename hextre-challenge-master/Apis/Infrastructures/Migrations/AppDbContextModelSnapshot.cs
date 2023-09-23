@@ -17,7 +17,7 @@ namespace Infrastructures.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -277,7 +277,7 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("OrderDetailId")
+                    b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ProviderId")
@@ -309,6 +309,48 @@ namespace Infrastructures.Migrations
                     b.HasIndex("RentWarehouseId");
 
                     b.ToTable("Contract");
+                });
+
+            modelBuilder.Entity("Domain.Entities.DepositPayment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("DepositPayments");
                 });
 
             modelBuilder.Entity("Domain.Entities.Feedback", b =>
@@ -579,7 +621,7 @@ namespace Infrastructures.Migrations
                     b.ToTable("ImageWarehouse");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OrderDetail", b =>
+            modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -606,6 +648,12 @@ namespace Infrastructures.Migrations
 
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<double>("Deposit")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Depth")
+                        .HasColumnType("float");
 
                     b.Property<double>("Height")
                         .HasColumnType("float");
@@ -637,9 +685,6 @@ namespace Infrastructures.Migrations
                     b.Property<Guid>("WarehouseDetailId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<double>("WarehousePrice")
                         .HasColumnType("float");
 
@@ -650,9 +695,9 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("WarehouseId");
+                    b.HasIndex("WarehouseDetailId");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
@@ -1073,6 +1118,43 @@ namespace Infrastructures.Migrations
                     b.ToTable("ServicePayment");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Transaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PaymentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("Transactions");
+                });
+
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1199,6 +1281,9 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("Depth")
+                        .HasColumnType("float");
+
                     b.Property<double>("Height")
                         .HasColumnType("float");
 
@@ -1213,6 +1298,9 @@ namespace Infrastructures.Migrations
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("UnitType")
                         .HasColumnType("int");
@@ -1382,6 +1470,21 @@ namespace Infrastructures.Migrations
                     b.Navigation("RentWarehouse");
                 });
 
+            modelBuilder.Entity("Domain.Entities.DepositPayment", b =>
+                {
+                    b.HasOne("Domain.Entities.ApplicationUser", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("Domain.Entities.Order", null)
+                        .WithMany("DepositPayments")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("Domain.Entities.Feedback", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser", "ApplicationUser")
@@ -1442,7 +1545,7 @@ namespace Infrastructures.Migrations
                     b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OrderDetail", b =>
+            modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser", "Customer")
                         .WithMany("OrderDetail")
@@ -1450,15 +1553,15 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Warehouse", "Warehouse")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("WarehouseId")
+                    b.HasOne("Domain.Entities.WarehouseDetail", "WarehouseDetail")
+                        .WithMany()
+                        .HasForeignKey("WarehouseDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
 
-                    b.Navigation("Warehouse");
+                    b.Navigation("WarehouseDetail");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
@@ -1538,6 +1641,17 @@ namespace Infrastructures.Migrations
                         .IsRequired();
 
                     b.Navigation("Contract");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Transaction", b =>
+                {
+                    b.HasOne("Domain.Entities.ServicePayment", "ServicePayment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ServicePayment");
                 });
 
             modelBuilder.Entity("Domain.Entities.Warehouse", b =>
@@ -1659,6 +1773,11 @@ namespace Infrastructures.Migrations
                     b.Navigation("PostHashtags");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Order", b =>
+                {
+                    b.Navigation("DepositPayments");
+                });
+
             modelBuilder.Entity("Domain.Entities.Post", b =>
                 {
                     b.Navigation("PostCategorys");
@@ -1691,8 +1810,6 @@ namespace Infrastructures.Migrations
                     b.Navigation("Feedbacks");
 
                     b.Navigation("ImageWarehouses");
-
-                    b.Navigation("OrderDetails");
 
                     b.Navigation("WarehouseDetails");
                 });

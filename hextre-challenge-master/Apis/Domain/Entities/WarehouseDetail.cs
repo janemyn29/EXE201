@@ -12,11 +12,12 @@ namespace Domain.Entities
     {
         [ForeignKey("Warehouse")]
         public Guid WarehouseId { get; set; }
-        
         public double Price { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
+        public double Depth { get; set; }
         public UnitType UnitType { get; set; }
+        public int Quantity { get; set; }
 
         public virtual Warehouse Warehouse { get; set; }
     }

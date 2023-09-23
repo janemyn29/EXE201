@@ -25,17 +25,18 @@ namespace Infrastructures
             services.AddSingleton<ICurrentTime, CurrentTime>();
 
             // ATTENTION: if you do migration please check file README.md
-            if (configuration.GetValue<bool>("UseInMemoryDatabase"))
+            /*if (configuration.GetValue<bool>("UseInMemoryDatabase"))
             {
                 services.AddDbContext<AppDbContext>(options =>
                     options.UseInMemoryDatabase("mentor_v1Db"));
             }
             else
             {
-                services.AddDbContext<AppDbContext>(options =>
+                
+            }*/
+            services.AddDbContext<AppDbContext>(options =>
                     options.UseSqlServer(GetConnection(configuration, env),
                         builder => builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
-            }
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
             // this configuration just use in-memory for fast develop
