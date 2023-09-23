@@ -26,6 +26,8 @@ namespace Infrastructures
         public DbSet<Provider> Provider { get; set; }
         public DbSet<Warehouse> Warehouse { get; set; }
         public DbSet<ImageWarehouse> ImageWarehouse { get; set; }
+        public DbSet<WarehouseDetail> WarehouseDetail { get; set; }
+        public DbSet<Contract> Contract { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

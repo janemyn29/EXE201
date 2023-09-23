@@ -1,16 +1,14 @@
 ﻿using Domain.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Application.ViewModels.WarehouseDetailViewModels
 {
-    public class WarehouseDetail:BaseEntity
+    public class WarehouseDetailCreateModel
     {
-        [ForeignKey("Warehouse")]
         public Guid WarehouseId { get; set; }
         public double Price { get; set; }
         public double Width { get; set; }
@@ -18,10 +16,5 @@ namespace Domain.Entities
         public double Depth { get; set; }
         public UnitType UnitType { get; set; }
         public int Quantity { get; set; }
-
-        public bool IsDisplay { get; set; }
-
-        public virtual Warehouse Warehouse { get; set; }
-        public IList<Order> Orders { get; set; }
     }
 }
