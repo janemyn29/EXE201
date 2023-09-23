@@ -10,11 +10,12 @@ namespace Domain.Entities
 {
     public class Contract:BaseEntity
     {
-        [ForeignKey("ApplicationUser")]
-        public string CustomerId { get; set; }
+        [ForeignKey("Customer")]
+        public Guid CustomerId { get; set; }
         [ForeignKey("RentWarehouse")]
         public Guid RentWarehouseId { get; set; }
-        public string StaffId { get; set; }
+        [ForeignKey("Manager")]
+        public Guid ManagerId { get; set; }
         public Guid OrderDetailId { get; set; }
         public Guid ProviderId { get; set; }
         public DateTime  StartTime{ get; set; }
@@ -30,7 +31,8 @@ namespace Domain.Entities
 
         public IList<ServicePayment> ServicePayments { get; set; }
 
-        public virtual ApplicationUser Customer { get; set; }
+        public virtual Customer Customer { get; set; }
         public virtual RentWarehouse RentWarehouse { get; set; }
+        public virtual Manager Manager { get; set; }
     }
 }

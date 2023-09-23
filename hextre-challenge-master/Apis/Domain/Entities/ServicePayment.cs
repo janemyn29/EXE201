@@ -27,5 +27,6 @@ namespace Domain.Entities
         public bool IsPaid { get; set; }
 
         public virtual Contract Contract { get; set; }
+        public IList<Transaction> Transactions { get; set; }
     }
 }

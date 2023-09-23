@@ -7,18 +7,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Feedback:BaseEntity
+    public class Transaction:BaseEntity
     {
+        [ForeignKey("ServicePayment")]
+        public Guid ServicePaymentId { get; set; }
         [ForeignKey("Customer")]
         public Guid CustomerId { get; set; }
-        [ForeignKey("Warehouse")]
-        public Guid WarehouseId { get; set; }
-
-        public string Rating { get; set; }
-        public string FeedbackText { get; set;}
-
+        public virtual ServicePayment ServicePayment { get; set; }
         public virtual Customer Customer { get; set; }
-        public virtual Warehouse Warehouse { get; set; }
-
     }
 }

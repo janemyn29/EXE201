@@ -15,11 +15,11 @@ namespace Domain.Entities
         public string Avatar { get; set; }
         public DateTime Birthday { get; set; }
 
-        public IList<Feedback> Feedbacks { get; set; }
-        public IList<OrderDetail> OrderDetail { get; set; }
         public IList<Post> Posts { get; set; }
-        public IList<Contract> Contracts { get; set; }
-        public IList<Request> Request { get; set; }
+        
+
+        public virtual Customer? Customer { get; set; }
+        public virtual Manager? Manager { get; set; }
 
     }
 }

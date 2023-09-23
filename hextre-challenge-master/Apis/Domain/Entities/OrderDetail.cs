@@ -12,8 +12,8 @@ namespace Domain.Entities
     {
         [ForeignKey("Warehouse")]
         public Guid WarehouseId { get; set; }
-        [ForeignKey("ApplicationUser")]
-        public string CustomerId { get; set; }
+        [ForeignKey("Customer")]
+        public Guid CustomerId { get; set; }
         public bool ContactInDay { get; set; }
         public int TotalCall { get; set; }
         public OrderStatus OrderStatus { get; set; }
@@ -27,6 +27,6 @@ namespace Domain.Entities
         public UnitType UnitType { get; set; }
 
         public virtual Warehouse Warehouse { get; set; }
-        public virtual ApplicationUser Customer { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

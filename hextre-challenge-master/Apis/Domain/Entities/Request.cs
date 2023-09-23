@@ -10,15 +10,15 @@ namespace Domain.Entities
 {
     public class Request:BaseEntity
     {
-        [ForeignKey("ApplicationUser")]
-        public string CustomerId { get; set; }
+        [ForeignKey("Customer")]
+        public Guid CustomerId { get; set; }
         public string StaffId { get; set; }
         public RequestStatus RequestStatus { get; set; }
         public string? DenyReason { get; set; }
         public RequestType RequestType { get; set; }
         public DateTime? CompleteDate { get; set; }
 
-        public virtual ApplicationUser Customer { get; set; }
+        public virtual Customer Customer { get; set; }
         public IList<RequestDetail> Details { get; set; }
     }
 }

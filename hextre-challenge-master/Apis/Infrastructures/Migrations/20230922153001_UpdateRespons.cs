@@ -6,26 +6,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructures.Migrations
 {
     /// <inheritdoc />
-    public partial class addService2 : Migration
+    public partial class UpdateRespons : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ServicePayment",
+                name: "ResponsibilityList",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ContractId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MonthPayment = table.Column<int>(type: "int", nullable: false),
-                    YearPayment = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ExtensionPeriod = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentType = table.Column<int>(type: "int", nullable: false),
-                    ContactedInDay = table.Column<bool>(type: "bit", nullable: true),
-                    IsPaid = table.Column<bool>(type: "bit", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -36,26 +28,37 @@ namespace Infrastructures.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServicePayment", x => x.Id);
+                    table.PrimaryKey("PK_ResponsibilityList", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ServicePayment_Contract_ContractId",
-                        column: x => x.ContractId,
-                        principalTable: "Contract",
+                        name: "FK_ResponsibilityList_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ResponsibilityList_Managers_ManagerId",
+                        column: x => x.ManagerId,
+                        principalTable: "Managers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServicePayment_ContractId",
-                table: "ServicePayment",
-                column: "ContractId");
+                name: "IX_ResponsibilityList_CustomerId",
+                table: "ResponsibilityList",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ResponsibilityList_ManagerId",
+                table: "ResponsibilityList",
+                column: "ManagerId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ServicePayment");
+                name: "ResponsibilityList");
         }
     }
 }

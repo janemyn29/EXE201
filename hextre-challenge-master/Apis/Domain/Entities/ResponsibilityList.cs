@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Feedback:BaseEntity
+    public class ResponsibilityList:BaseEntity
     {
+
         [ForeignKey("Customer")]
         public Guid CustomerId { get; set; }
-        [ForeignKey("Warehouse")]
-        public Guid WarehouseId { get; set; }
 
-        public string Rating { get; set; }
-        public string FeedbackText { get; set;}
-
+        [ForeignKey("Manager")]
+        public Guid ManagerId { get; set; }
         public virtual Customer Customer { get; set; }
-        public virtual Warehouse Warehouse { get; set; }
-
+        public virtual Manager Manager { get; set; }
     }
 }

@@ -42,6 +42,7 @@ builder.Services.AddSingleton(configuration);
 */
 builder.Services.AddSingleton(configuration);
 
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
