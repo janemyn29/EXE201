@@ -4,6 +4,8 @@ using Application.Commons;
 using Domain.Entities;
 using Application.ViewModels.CategoryViewModels;
 using Application.ViewModels.ProviderViewModels;
+using Application.ViewModels.WarehouseViewModel;
+using Application.ViewModels.ImageWarehouseViewModels;
 
 namespace Infrastructures.Mappers
 {
@@ -20,8 +22,16 @@ namespace Infrastructures.Mappers
             CreateMap<CategoryViewModel, Category>().ReverseMap();
 
             CreateMap<CreateProviderViewModel, Provider>().ReverseMap();
-            CreateMap<UpdateProviderViewModel, Category>().ReverseMap();
+            CreateMap<UpdateProviderViewModel, Provider>().ReverseMap();
             CreateMap<ProviderViewModel, Provider>().ReverseMap();
+
+            CreateMap<WarehoureUpdateModel, Warehouse>().ReverseMap();
+            CreateMap<WarehourseCreateModel, Warehouse>().ReverseMap();
+            CreateMap<Warehouse, WarehouseViewModel>().ReverseMap();
+            
+            CreateMap<ImageWarehouseViewModel, ImageWarehouse>().ReverseMap();
+            CreateMap<ImageWarehouseCreateModel, ImageWarehouse>().ReverseMap();
+
         }
     }
 }

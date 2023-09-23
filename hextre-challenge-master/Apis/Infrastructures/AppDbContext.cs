@@ -8,6 +8,10 @@ namespace Infrastructures
 {
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
+        public AppDbContext()
+        {
+            
+        }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
 
@@ -20,24 +24,26 @@ namespace Infrastructures
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Provider> Provider { get; set; }
+        public DbSet<Warehouse> Warehouse { get; set; }
+        public DbSet<ImageWarehouse> ImageWarehouse { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
         }
 
-        /*private string GetConnectionString()
+        private string GetConnectionString()
         {
             IConfiguration config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.Development.json", true, true).Build();
             var strConn = config["ConnectionStrings:Development"];
             return strConn;
-        }*/
-        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=Warehouse;Persist Security Info=True;User ID=sa;Password=12345");
+                optionsBuilder.UseSqlServer(GetConnectionString());
             }
-        }*/
+        }
     }
 }

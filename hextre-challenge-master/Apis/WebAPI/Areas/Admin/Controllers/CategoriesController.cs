@@ -55,14 +55,16 @@ namespace WebAPI.Areas.Admin.Controllers
 
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> PutCategory(UpdateCategoryViewModel model)
         {
             if (!CategoryExists(model.Id))
             {
                 return NotFound("Không tìm thấy danh mục kho bạn yêu cầu!");
             }
+            
             var category = await _context.Category.AsNoTracking().SingleOrDefaultAsync(x => x.Id == model.Id && x.IsDeleted == false);
+            category = _mapper.Map<Category>(category);
             _context.Entry(category).State = EntityState.Modified;
 
             try
@@ -94,7 +96,7 @@ namespace WebAPI.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
             
 
@@ -144,7 +146,7 @@ namespace WebAPI.Areas.Admin.Controllers
 
         private bool CategoryExistsName(string name)
         {
-            return (_context.Category?.Any(e => e.Name.ToLower().Equals(name.ToLower()))).GetValueOrDefault();
+            return (_context.Category?.Any(e => e.Name.ToLower().Equals(name.ToLower()) && e.IsDeleted == false)).GetValueOrDefault();
         }
     }
 }

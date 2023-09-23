@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructures
 {
-   /* public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+    public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     {
         public AppDbContext CreateDbContext(string[] args)
         {
@@ -17,5 +17,5 @@ namespace Infrastructures
 
             return new AppDbContext(optionsBuilder.Options);
         }
-    }*/
+    }
 }

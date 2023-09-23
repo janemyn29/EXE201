@@ -18,11 +18,18 @@ namespace Infrastructures
         public static IServiceCollection AddInfrastructuresService(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
             services.AddScoped<IChemicalService, ChemicalService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IWarehouseService, WarehouseService>();
+
             services.AddScoped<IChemicalRepository, ChemicalRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProviderRepository, ProviderRepository>();
+            
             services.AddSingleton<ICurrentTime, CurrentTime>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
 
             // ATTENTION: if you do migration please check file README.md
             /*if (configuration.GetValue<bool>("UseInMemoryDatabase"))
