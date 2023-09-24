@@ -13,11 +13,14 @@ using Application.ViewModels.ProviderViewModels;
 using WebAPI.Validations.Providers;
 using Application.ViewModels;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
     [Route("Admin/api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class ProvidersController : ControllerBase
     {
         private readonly AppDbContext _context;

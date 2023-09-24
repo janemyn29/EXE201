@@ -15,11 +15,14 @@ using WebAPI.Validations.Providers;
 using WebAPI.Validations.Warehouses;
 using Application.ViewModels.ImageWarehouseViewModels;
 using Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
     [Route("Admin/api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class WarehousesController : ControllerBase
     {
         private readonly AppDbContext _context;

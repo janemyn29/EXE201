@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Application.Repositories;
 using Application.Services;
+using Domain.Entities;
 using Infrastructures.Mappers;
 using Infrastructures.Repositories;
 using Infrastructures.Services;
@@ -45,12 +46,12 @@ namespace Infrastructures
                     options.UseSqlServer(GetConnection(configuration, env),
                         builder => builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+            services.AddIdentity < ApplicationUser, IdentityRole>().AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
             // this configuration just use in-memory for fast develop
             //services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase("test"));
 
             services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
-
+            services.Configure<IdentityOptions>(options => options.SignIn.RequireConfirmedEmail = true);
 
 
             return services;

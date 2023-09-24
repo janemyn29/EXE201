@@ -10,11 +10,13 @@ using Infrastructures;
 using Application.ViewModels.CategoryViewModels;
 using AutoMapper;
 using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
     [Route("Admin/api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="Admin")]
     public class CategoriesController : ControllerBase
     {
         private readonly AppDbContext _context;

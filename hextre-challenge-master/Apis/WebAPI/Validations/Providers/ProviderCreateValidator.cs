@@ -17,7 +17,8 @@ namespace WebAPI.Validations.Providers
                 .Must(IsIdentityEmail).WithMessage("Email đã được sử dụng.").EmailAddress().WithMessage("Email không hợp lệ.");
             RuleFor(x => x.Phone).NotEmpty().WithMessage("Số điện thoại không được để trống.")
                 .MaximumLength(10)
-                .WithMessage("Số điện thoại không quá 50 ký tự.");
+                .WithMessage("Số điện thoại phải có 10 ký tự.").MinimumLength(10)
+                .WithMessage("Số điện thoại  phải có 10 ký tự.");
             RuleFor(x => x.ShortDescription).NotEmpty().WithMessage("Mô tả ngắn không được để trống.")
                 .MaximumLength(100)
                 .WithMessage("Mô tả ngắn không quá 100 ký tự.");
