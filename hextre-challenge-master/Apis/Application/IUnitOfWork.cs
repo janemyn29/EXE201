@@ -11,6 +11,9 @@ namespace Application
 
         public IProviderRepository ProviderRepository { get; }
         public IWarehouseRepository WarehouseRepository { get; }
+        public IWarehouseDetailRepository WarehouseDetailRepository { get; }
+        public IOrderRepository OrderRepository { get; }
+        public INoteRepository NoteRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }

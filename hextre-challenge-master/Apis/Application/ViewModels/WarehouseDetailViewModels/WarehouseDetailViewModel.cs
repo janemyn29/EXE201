@@ -11,7 +11,8 @@ namespace Application.ViewModels.WarehouseDetailViewModels
     {
         public Guid Id { get; set; }
         public Guid WarehouseId { get; set; }
-        public double Price { get; set; }
+        public double WarehousePrice { get; set; }
+        public double ServicePrice { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
         public double Depth { get; set; }

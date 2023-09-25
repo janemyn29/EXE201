@@ -7,6 +7,7 @@ using Application.ViewModels.ProviderViewModels;
 using Application.ViewModels.WarehouseViewModel;
 using Application.ViewModels.ImageWarehouseViewModels;
 using Application.ViewModels.WarehouseDetailViewModels;
+using Application.ViewModels.OrderViewModels;
 
 namespace Infrastructures.Mappers
 {
@@ -36,6 +37,12 @@ namespace Infrastructures.Mappers
             
             CreateMap<ImageWarehouseViewModel, ImageWarehouse>().ReverseMap();
             CreateMap<ImageWarehouseCreateModel, ImageWarehouse>().ReverseMap();
+            
+            
+            CreateMap<OrderViewModel, Order>().ReverseMap();
+            /*CreateMap<ImageWarehouseCreateModel, ImageWarehouse>().ReverseMap();*/
+
+
 
         }
     }

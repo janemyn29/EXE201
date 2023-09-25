@@ -1,4 +1,5 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,13 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Application.ViewModels.OrderViewModels
 {
-    public class Order: BaseEntity
+    public class OrderViewModel
     {
-        [ForeignKey("WarehouseDetail")]
+        public Guid Id { get; set; }
         public Guid WarehouseDetailId { get; set; }
-        [ForeignKey("ApplicationUser")]
         public string CustomerId { get; set; }
         public bool ContactInDay { get; set; }
         public int TotalCall { get; set; }
@@ -26,11 +26,9 @@ namespace Domain.Entities
         public double Width { get; set; }
         public double Height { get; set; }
         public double Depth { get; set; }
-        public UnitType UnitType { get; set; }
-        public PaymentStatus PaymentStatus { get; set; }
+        public string UnitType { get; set; }
+        public string PaymentStatus { get; set; }
 
         public virtual WarehouseDetail WarehouseDetail { get; set; }
-        public virtual ApplicationUser Customer { get; set; }
-        public IList<DepositPayment> DepositPayments { get; set; }
     }
 }

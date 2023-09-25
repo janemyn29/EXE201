@@ -4,6 +4,7 @@ using Infrastructures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230925052214_updateReason")]
+    partial class updateReason
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -621,55 +624,6 @@ namespace Infrastructures.Migrations
                     b.ToTable("ImageWarehouse");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Notification", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeleteBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ModificationBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Notifications");
-                });
-
             modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -677,6 +631,7 @@ namespace Infrastructures.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CancelReason")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("ContactInDay")
@@ -717,9 +672,6 @@ namespace Infrastructures.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PaymentStatus")
                         .HasColumnType("int");
 
                     b.Property<double>("ServicePrice")
@@ -1355,20 +1307,17 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<double>("ServicePrice")
-                        .HasColumnType("float");
 
                     b.Property<int>("UnitType")
                         .HasColumnType("int");
 
                     b.Property<Guid>("WarehouseId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("WarehousePrice")
-                        .HasColumnType("float");
 
                     b.Property<double>("Width")
                         .HasColumnType("float");
@@ -1605,17 +1554,6 @@ namespace Infrastructures.Migrations
                         .IsRequired();
 
                     b.Navigation("Warehouse");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Notification", b =>
-                {
-                    b.HasOne("Domain.Entities.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>

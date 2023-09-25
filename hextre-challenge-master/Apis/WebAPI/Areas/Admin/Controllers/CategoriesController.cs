@@ -11,6 +11,7 @@ using Application.ViewModels.CategoryViewModels;
 using AutoMapper;
 using Humanizer;
 using Microsoft.AspNetCore.Authorization;
+using Application;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
@@ -21,11 +22,13 @@ namespace WebAPI.Areas.Admin.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unit;
 
-        public CategoriesController(AppDbContext context,IMapper mapper)
+        public CategoriesController(AppDbContext context,IMapper mapper,IUnitOfWork unitOfWork)
         {
             _context = context;
             _mapper = mapper;
+            _unit = unitOfWork;
         }
 
         // GET: api/Categories
@@ -39,7 +42,7 @@ namespace WebAPI.Areas.Admin.Controllers
 
         // GET: api/Categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(Guid id)
+        public async Task<ActionResult> GetCategory(Guid id)
         {
             if (_context.Category == null)
             {
@@ -52,7 +55,7 @@ namespace WebAPI.Areas.Admin.Controllers
                 return NotFound("Không tìm thấy danh mục kho bạn yêu cầu!");
             }
             var result = _mapper.Map<CategoryViewModel>(category);
-            return category;
+            return Ok(result);
         }
 
         // PUT: api/Categories/5
@@ -93,8 +96,9 @@ namespace WebAPI.Areas.Admin.Controllers
                     return NotFound("Tên danh mục này đã tồn tại!");
                 }
                 var category = _mapper.Map<Category>(model);
-                _context.Category.Add(category);
-                await _context.SaveChangesAsync();
+               await _unit.CategoryRepository.AddAsync(category);
+                await _unit.SaveChangeAsync();
+                
             }
             catch (Exception ex)
             {
