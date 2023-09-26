@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Enums
 {
-    public enum PaymentStatus
+    public enum DepositStatus
     {
-        Waiting = 1,
-        Success =2,
-        Fail = 3
+        Success = 1, Failed = 2
     }
 }

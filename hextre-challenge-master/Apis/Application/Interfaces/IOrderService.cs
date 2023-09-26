@@ -1,4 +1,5 @@
 ﻿using Application.ViewModels.OrderViewModels;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Application.Interfaces
 {
     public interface IOrderService
     {
-        public Task CreateOrder(OrderCreateModel model);
+        public Task<Guid> CreateOrder(OrderCreateModel model);
+        public Task<string> Payment(Order order);
     }
 }

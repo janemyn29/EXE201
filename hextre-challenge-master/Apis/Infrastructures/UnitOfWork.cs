@@ -14,6 +14,7 @@ namespace Infrastructures
         private readonly IWarehouseDetailRepository _warehouseDetailRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly INoteRepository _noteRepository;
+        private readonly IDepositRepository _depositRepository;
 
         public UnitOfWork(AppDbContext dbContext,
             IChemicalRepository chemicalRepository,
@@ -23,7 +24,8 @@ namespace Infrastructures
             IProviderRepository providerRepository,
             IWarehouseDetailRepository warehouseDetailRepository,
             IOrderRepository orderRepository
-            ,INoteRepository noteRepository)
+            ,INoteRepository noteRepository,
+            IDepositRepository depositRepository)
         {
             _dbContext = dbContext;
             _chemicalRepository = chemicalRepository;
@@ -34,6 +36,7 @@ namespace Infrastructures
             _warehouseDetailRepository = warehouseDetailRepository;
             _orderRepository = orderRepository;
             _noteRepository = noteRepository;
+            _depositRepository = depositRepository;
         }
         public IChemicalRepository ChemicalRepository => _chemicalRepository;
 
@@ -50,6 +53,8 @@ namespace Infrastructures
         public IOrderRepository OrderRepository => _orderRepository;
 
         public INoteRepository NoteRepository => _noteRepository;
+
+        public IDepositRepository DepositRepository => _depositRepository;
 
         public async Task<int> SaveChangeAsync()
         {

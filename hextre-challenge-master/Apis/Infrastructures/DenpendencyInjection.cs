@@ -32,6 +32,7 @@ namespace Infrastructures
             services.AddScoped<IOrderRepository , OrderRepository>();
             services.AddScoped<IWarehouseDetailRepository , WarehouseDetailRepository>();
             services.AddScoped<INoteRepository , NoteRepository>();
+            services.AddScoped<IDepositRepository , DepositRepository>();
             
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
