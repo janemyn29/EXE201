@@ -10,6 +10,8 @@ using Infrastructures;
 using Application.ViewModels.CategoryViewModels;
 using Application.ViewModels.OrderViewModels;
 using AutoMapper;
+using Application;
+using Domain.Enums;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
@@ -19,11 +21,13 @@ namespace WebAPI.Areas.Admin.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unit;
 
-        public OrdersController(AppDbContext context,IMapper mapper)
+        public OrdersController(AppDbContext context, IMapper mapper, IUnitOfWork unit)
         {
             _context = context;
             _mapper = mapper;
+            _unit = unit;
         }
 
         // GET: api/Orders
@@ -31,6 +35,14 @@ namespace WebAPI.Areas.Admin.Controllers
         public async Task<ActionResult> GetOrder()
         {
             var orders = await _context.Order.AsNoTracking().Where(x => x.IsDeleted == false).ToListAsync();
+            var result = _mapper.Map<IList<OrderViewModel>>(orders);
+            return Ok(result);
+        }
+
+        [HttpGet("Filter")]
+        public async Task<ActionResult> OrderFilter(OrderStatus orderStatus)
+        {
+            var orders = await _context.Order.AsNoTracking().Where(x => x.IsDeleted == false && x.OrderStatus == orderStatus).ToListAsync();
             var result = _mapper.Map<IList<OrderViewModel>>(orders);
             return Ok(result);
         }
@@ -55,34 +67,55 @@ namespace WebAPI.Areas.Admin.Controllers
 
         // PUT: api/Orders/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        /*[HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(Guid id, Order order)
+        [HttpPut("UpdateCall/{id}")]
+        public async Task<IActionResult> UpdateCall(Guid id)
         {
-            if (id != order.Id)
+            var order = await _unit.OrderRepository.GetByIdAsync(id);
+            if(order == null)
             {
-                return BadRequest();
+                return NotFound("Không tìm thấy đơn hàng mà bạn yêu cầu!");
             }
-
-            _context.Entry(order).State = EntityState.Modified;
-
-            try
+            else
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(id))
+                try
                 {
-                    return NotFound();
+                    order.TotalCall++;
+                    order.ContactInDay = true;
+                    _unit.OrderRepository.Update(order);
+                    await _unit.SaveChangeAsync();
+                    return Ok("Cập nhật đơn hàng thành công!");
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw;
+                    return NotFound("Đã có lỗi xảy ra trong quá trình cập nhật đơn hàng!");
                 }
             }
+        }
 
-            return NoContent();
-        }*/
+
+        [HttpPut("UpdateStatus")]
+        public async Task<IActionResult> UpdateStatus(UpdateOrderStatusModel model)
+        {
+            var order = await _unit.OrderRepository.GetByIdAsync(model.Id);
+            if (order == null)
+            {
+                return NotFound("Không tìm thấy đơn hàng mà bạn yêu cầu!");
+            }
+            else
+            {
+                try
+                {
+                    order.OrderStatus = model.OrderStatus;
+                    _unit.OrderRepository.Update(order);
+                    await _unit.SaveChangeAsync();
+                    return Ok("Cập nhật đơn hàng thành công!");
+                }
+                catch (Exception ex)
+                {
+                    return NotFound("Đã có lỗi xảy ra trong quá trình cập nhật đơn hàng!");
+                }
+            }
+        }
 
         // POST: api/Orders
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
