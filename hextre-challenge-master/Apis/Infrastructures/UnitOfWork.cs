@@ -15,6 +15,7 @@ namespace Infrastructures
         private readonly IOrderRepository _orderRepository;
         private readonly INoteRepository _noteRepository;
         private readonly IDepositRepository _depositRepository;
+        private readonly IPostCategoryRepository _postCategoryRepository;
 
         public UnitOfWork(AppDbContext dbContext,
             IChemicalRepository chemicalRepository,
@@ -23,9 +24,10 @@ namespace Infrastructures
             ICategoryRepository categoryRepository,
             IProviderRepository providerRepository,
             IWarehouseDetailRepository warehouseDetailRepository,
-            IOrderRepository orderRepository
-            ,INoteRepository noteRepository,
-            IDepositRepository depositRepository)
+            IOrderRepository orderRepository,
+            INoteRepository noteRepository,
+            IDepositRepository depositRepository,
+            IPostCategoryRepository postCategoryRepository)
         {
             _dbContext = dbContext;
             _chemicalRepository = chemicalRepository;
@@ -37,6 +39,7 @@ namespace Infrastructures
             _orderRepository = orderRepository;
             _noteRepository = noteRepository;
             _depositRepository = depositRepository;
+            _postCategoryRepository = postCategoryRepository;
         }
         public IChemicalRepository ChemicalRepository => _chemicalRepository;
 
@@ -55,6 +58,8 @@ namespace Infrastructures
         public INoteRepository NoteRepository => _noteRepository;
 
         public IDepositRepository DepositRepository => _depositRepository;
+
+        public IPostCategoryRepository PostCategoryRepository => _postCategoryRepository;
 
         public async Task<int> SaveChangeAsync()
         {

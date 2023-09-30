@@ -8,6 +8,7 @@ using Application.ViewModels.WarehouseViewModel;
 using Application.ViewModels.ImageWarehouseViewModels;
 using Application.ViewModels.WarehouseDetailViewModels;
 using Application.ViewModels.OrderViewModels;
+using Application.ViewModels.PostCategoryViewModels;
 
 namespace Infrastructures.Mappers
 {
@@ -42,7 +43,9 @@ namespace Infrastructures.Mappers
             CreateMap<OrderViewModel, Order>().ReverseMap();
             /*CreateMap<ImageWarehouseCreateModel, ImageWarehouse>().ReverseMap();*/
 
-
+            CreateMap<PostCategoryViewModel, PostCategory>().ReverseMap();
+            CreateMap<CreatePostCategoryViewModel, PostCategory>().ReverseMap();
+            CreateMap<UpdatePostCategoryViewModel, PostCategory>().ReverseMap();
 
         }
     }
