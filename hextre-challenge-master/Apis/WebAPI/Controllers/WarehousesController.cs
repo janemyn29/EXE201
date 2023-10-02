@@ -28,6 +28,14 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("Search")]
+        public async Task<IActionResult> SearchWarehouse(string keyword)
+        {
+            var warehouse = await _context.Warehouse.AsNoTracking().Where(x => x.IsDeleted == false && x.IsDisplay == true && x.Name.ToLower().Contains(keyword.ToLower())).ToListAsync();
+            var result = _mapper.Map<IList<WarehouseViewModel>>(warehouse);
+            return Ok(result);
+        }
+
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWarehouse(Guid id)
