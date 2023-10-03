@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.Repositories;
+using Infrastructures.Repositories;
 
 namespace Infrastructures
 {
@@ -16,6 +17,7 @@ namespace Infrastructures
         private readonly INoteRepository _noteRepository;
         private readonly IDepositRepository _depositRepository;
         private readonly IPostCategoryRepository _postCategoryRepository;
+        private readonly IHashtagRepository _hashtagRepository;
 
         public UnitOfWork(AppDbContext dbContext,
             IChemicalRepository chemicalRepository,
@@ -27,7 +29,8 @@ namespace Infrastructures
             IOrderRepository orderRepository,
             INoteRepository noteRepository,
             IDepositRepository depositRepository,
-            IPostCategoryRepository postCategoryRepository)
+            IPostCategoryRepository postCategoryRepository,
+            IHashtagRepository hashtagRepository)
         {
             _dbContext = dbContext;
             _chemicalRepository = chemicalRepository;
@@ -40,6 +43,7 @@ namespace Infrastructures
             _noteRepository = noteRepository;
             _depositRepository = depositRepository;
             _postCategoryRepository = postCategoryRepository;
+            _hashtagRepository = hashtagRepository;
         }
         public IChemicalRepository ChemicalRepository => _chemicalRepository;
 
@@ -60,6 +64,8 @@ namespace Infrastructures
         public IDepositRepository DepositRepository => _depositRepository;
 
         public IPostCategoryRepository PostCategoryRepository => _postCategoryRepository;
+
+        public IHashtagRepository HashtagRepository => _hashtagRepository;
 
         public async Task<int> SaveChangeAsync()
         {

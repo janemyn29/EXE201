@@ -9,6 +9,7 @@ using Application.ViewModels.ImageWarehouseViewModels;
 using Application.ViewModels.WarehouseDetailViewModels;
 using Application.ViewModels.OrderViewModels;
 using Application.ViewModels.PostCategoryViewModels;
+using Application.ViewModels.HashtagViewModels;
 
 namespace Infrastructures.Mappers
 {
@@ -46,6 +47,10 @@ namespace Infrastructures.Mappers
             CreateMap<PostCategoryViewModel, PostCategory>().ReverseMap();
             CreateMap<CreatePostCategoryViewModel, PostCategory>().ReverseMap();
             CreateMap<UpdatePostCategoryViewModel, PostCategory>().ReverseMap();
+
+            CreateMap<CreateHashtagViewModel, Hashtag>().ReverseMap();
+            CreateMap<UpdateHashtagViewModel, Hashtag>().ReverseMap();
+            CreateMap<HashtagViewModel, Hashtag>().ReverseMap();
 
         }
     }

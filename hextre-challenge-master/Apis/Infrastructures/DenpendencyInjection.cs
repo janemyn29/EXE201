@@ -23,6 +23,7 @@ namespace Infrastructures
             services.AddScoped<IWarehouseService, WarehouseService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IPostCategoryService, PostCategoryService>();
+            services.AddScoped<IHashtagService, HashtagService>();
 
             services.AddScoped<IChemicalRepository, ChemicalRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -35,6 +36,7 @@ namespace Infrastructures
             services.AddScoped<INoteRepository , NoteRepository>();
             services.AddScoped<IDepositRepository , DepositRepository>();
             services.AddScoped<IPostCategoryRepository, PostCategoryRepository>();
+            services.AddScoped<IHashtagRepository, HashtagRepository>();
             
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
