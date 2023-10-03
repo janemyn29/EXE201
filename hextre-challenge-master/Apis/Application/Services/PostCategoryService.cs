@@ -26,7 +26,9 @@ namespace Application.Services
         public async Task<List<PostCategoryViewModel>> GetPostCategory()
         {
             var post = await _unitOfWork.PostCategoryRepository.GetAllAsync();
-            var mapper = _mapper.Map<List<PostCategoryViewModel>>(post);
+
+            var mapper = _mapper.Map<List<PostCategoryViewModel>>(post.Where(x => x.IsDeleted == false));
+            
             return mapper;
         }
 
@@ -36,19 +38,16 @@ namespace Application.Services
 
             await _unitOfWork.PostCategoryRepository.AddAsync(mapper);
 
-            if (await _unitOfWork.SaveChangeAsync() > 0)
-                return true;
-            else throw new Exception("Add PostCategory faild.");
+            return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Add PostCategory faild.");
         }
 
         public async Task<bool> UpdatePostCategory(UpdatePostCategoryViewModel updatePostCategoryViewModel)
         {
             var mapper = _mapper.Map<PostCategory>(updatePostCategoryViewModel);
+
             _unitOfWork.PostCategoryRepository.Update(mapper);
 
-            if (await _unitOfWork.SaveChangeAsync() > 0)
-                return true;
-            else throw new Exception("Update PostCategory faild.");
+            return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Update PostCategory faild.");
         }
 
         public async Task<bool> DeletePostCategory(Guid id)
@@ -60,8 +59,8 @@ namespace Application.Services
             else
             {
                 result.IsDeleted = true;
-                await _unitOfWork.SaveChangeAsync();
-                return true;
+
+                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Delete PostCategory faild.");
             }
         }
     }

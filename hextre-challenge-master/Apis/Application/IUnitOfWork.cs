@@ -16,6 +16,7 @@ namespace Application
         public INoteRepository NoteRepository { get; }
         public IDepositRepository DepositRepository  { get; }
         public IPostCategoryRepository PostCategoryRepository { get; }
+        public IHashtagRepository HashtagRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }
