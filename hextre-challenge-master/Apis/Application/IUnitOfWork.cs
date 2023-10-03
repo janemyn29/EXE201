@@ -17,6 +17,7 @@ namespace Application
         public IDepositRepository DepositRepository  { get; }
         public IPostCategoryRepository PostCategoryRepository { get; }
         public IHashtagRepository HashtagRepository { get; }
+        public IPostRepository PostRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }
