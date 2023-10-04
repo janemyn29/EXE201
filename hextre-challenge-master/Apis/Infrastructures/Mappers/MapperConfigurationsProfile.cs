@@ -32,16 +32,18 @@ namespace Infrastructures.Mappers
 
             CreateMap<WarehoureUpdateModel, Warehouse>().ReverseMap();
             CreateMap<WarehourseCreateModel, Warehouse>().ReverseMap();
-            CreateMap<Warehouse, WarehouseViewModel>().ReverseMap();
-            
+            CreateMap<Warehouse, WarehouseViewModel>()
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+                .ForMember(dest => dest.ProviderName, opt => opt.MapFrom(src => src.Provider.Name));
+
             CreateMap<WarehouseDetailViewModel, WarehouseDetail>().ReverseMap();
             CreateMap<WarehouseDetailCreateModel, WarehouseDetail>().ReverseMap();
             CreateMap<WarehouseDetail, WarehouseDetailUpdateModel>().ReverseMap();
-            
+
             CreateMap<ImageWarehouseViewModel, ImageWarehouse>().ReverseMap();
             CreateMap<ImageWarehouseCreateModel, ImageWarehouse>().ReverseMap();
-            
-            
+
+
             CreateMap<OrderViewModel, Order>().ReverseMap();
             /*CreateMap<ImageWarehouseCreateModel, ImageWarehouse>().ReverseMap();*/
 
