@@ -43,8 +43,6 @@ namespace Application.Services
             {
                 var mapper = _mapper.Map<Post>(createPostViewModel);
 
-                mapper.AuthorId = _claimsService.GetCurrentUserId.ToString();
-
                 await _unitOfWork.PostRepository.AddAsync(mapper);
 
                 return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Add Post faild.");
@@ -62,8 +60,6 @@ namespace Application.Services
 
                 var mapper = _mapper.Map<Post>(updatePostViewModel);
 
-                mapper.AuthorId = _claimsService.GetCurrentUserId.ToString();
-
                 _unitOfWork.PostRepository.Update(mapper);
 
                 return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Update Post faild.");
@@ -79,8 +75,7 @@ namespace Application.Services
                 throw new Exception("Don't found this Post");
             else
             {
-                result.IsDeleted = true;
-
+                _unitOfWork.PostRepository.SoftRemove(result);
                 return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Delete Post faild.");
             }
         }

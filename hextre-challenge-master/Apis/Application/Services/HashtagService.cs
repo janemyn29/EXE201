@@ -52,7 +52,7 @@ namespace Application.Services
 
             if (hashtag != null) {
 
-                hashtag.IsDeleted = true;
+                _unitOfWork.HashtagRepository.SoftRemove(hashtag);
 
                 return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Delete Hashtag faild.");
             }
