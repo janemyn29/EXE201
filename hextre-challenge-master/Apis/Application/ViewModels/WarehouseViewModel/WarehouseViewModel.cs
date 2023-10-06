@@ -20,6 +20,8 @@ namespace Application.ViewModels.WarehouseViewModel
         public string LongitudeIP { get; set; }
         public string LatitudeIP { get; set; }
         public bool IsDisplay { get; set; }
+        public string ProviderName { get; set; }
+        public string CategoryName { get; set; }
 
     }
 }
