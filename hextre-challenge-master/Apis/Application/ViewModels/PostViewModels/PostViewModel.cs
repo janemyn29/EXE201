@@ -8,6 +8,7 @@ namespace Application.ViewModels.PostViewModels
 {
     public class PostViewModel
     {
+        public Guid Id { get; set; }
         public string AuthorId { get; set; }
         public Guid PostCategoryId { get; set; }
 

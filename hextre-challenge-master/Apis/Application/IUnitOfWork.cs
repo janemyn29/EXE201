@@ -18,6 +18,7 @@ namespace Application
         public IPostCategoryRepository PostCategoryRepository { get; }
         public IHashtagRepository HashtagRepository { get; }
         public IPostRepository PostRepository { get; }
+        public IPostHashtagRepository PostHashtagRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }

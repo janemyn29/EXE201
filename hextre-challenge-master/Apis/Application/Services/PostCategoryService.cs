@@ -58,7 +58,7 @@ namespace Application.Services
                 throw new Exception("Don't found this PostCategory");
             else
             {
-                result.IsDeleted = true;
+                _unitOfWork.PostCategoryRepository.SoftRemove(result);
 
                 return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Delete PostCategory faild.");
             }
