@@ -22,6 +22,7 @@ namespace Application.ViewModels.WarehouseViewModel
         public bool IsDisplay { get; set; }
         public string ProviderName { get; set; }
         public string CategoryName { get; set; }
+        public string imageURL { get; set; }
 
     }
 }

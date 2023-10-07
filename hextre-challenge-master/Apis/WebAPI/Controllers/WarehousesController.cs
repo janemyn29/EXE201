@@ -23,7 +23,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetWarehouse()
         {
-            var warehouse = await _context.Warehouse.AsNoTracking().Include(w => w.Category).Include(w => w.Provider).Where(x => x.IsDeleted == false && x.IsDisplay == true).ToListAsync();
+            var warehouse = await _context.Warehouse.AsNoTracking().Include(w => w.Category).Include(w => w.Provider).Include(w => w.ImageWarehouses).Where(x => x.IsDeleted == false && x.IsDisplay == true).ToListAsync();
             var result = _mapper.Map<IList<WarehouseViewModel>>(warehouse);
             return Ok(result);
         }
