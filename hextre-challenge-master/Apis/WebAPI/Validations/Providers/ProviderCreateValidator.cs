@@ -20,8 +20,8 @@ namespace WebAPI.Validations.Providers
                 .WithMessage("Số điện thoại phải có 10 ký tự.").MinimumLength(10)
                 .WithMessage("Số điện thoại  phải có 10 ký tự.");
             RuleFor(x => x.ShortDescription).NotEmpty().WithMessage("Mô tả ngắn không được để trống.")
-                .MaximumLength(100)
-                .WithMessage("Mô tả ngắn không quá 100 ký tự.");
+                .MaximumLength(300)
+                .WithMessage("Mô tả ngắn không quá 300 ký tự.");
             RuleFor(x => x.Description).NotEmpty().WithMessage("Mô tả không được để trống.")
               .MaximumLength(1000)
               .WithMessage("Mô tả không quá 1000 ký tự.");

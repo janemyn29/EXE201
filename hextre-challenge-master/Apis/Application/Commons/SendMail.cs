@@ -20,10 +20,10 @@ namespace Application.Commons
 
             var builder = new BodyBuilder();
 
-            builder.HtmlBody = confirmLink + "<div style=\"font-weight: bold;\">Trân trọng, <br>\r\n        <div style=\"color: #FF630E;\">Bộ phận Nhân sự TechGenius</div>\r\n    </div>\r\n<br>    <img src=\"cid:image1\" alt=\"\" width=\"200px\">\r\n    <br>\r\n    <br>\r\n    <div>\r\n        Email liên hệ: \r\n    </div>\r\n    <div>Số điện thoại: </div>\r\n</div>";
+            builder.HtmlBody = confirmLink + "<div style=\"font-weight: bold;\">Trân trọng, <br>\r\n        <div style=\"color: #FF630E;\">Bộ phận Dịch vụ khách hàng Warehouse Brigde</div>\r\n    </div>\r\n<br>    <br>\r\n    <div>\r\n        Email liên hệ: Warehousebridge.service@gmail.com \r\n    </div>\r\n    <div>Số điện thoại: </div>\r\n</div>";
             // Khởi tạo phần đính kèm của email (ảnh)
-            var attachment = builder.LinkedResources.Add("File/Logo/logoWarehouse.png");
-            attachment.ContentId = "image1"; // Thiết lập Content-ID cho phần đính kèm
+            //var attachment = builder.LinkedResources.Add("File/Logo/logoWarehouse.png");
+            //attachment.ContentId = "image1"; // Thiết lập Content-ID cho phần đính kèm
 
             email.Body = builder.ToMessageBody();
             using var smtp = new MailKit.Net.Smtp.SmtpClient();

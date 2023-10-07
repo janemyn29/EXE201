@@ -16,7 +16,7 @@ namespace Application.ViewModels.WarehouseDetailViewModels
         public double Width { get; set; }
         public double Height { get; set; }
         public double Depth { get; set; }
-        public UnitType UnitType { get; set; }
+        public string UnitType { get; set; }
         public int Quantity { get; set; }
         public bool IsDisplay { get; set; }
 

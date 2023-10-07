@@ -20,8 +20,8 @@ namespace WebAPI.Validations.Warehouses
                 .WithMessage("Địa chỉ không quá 100 ký tự.");
             RuleFor(x => x.LongitudeIP).NotEmpty().WithMessage("LongitudeIP không được để trống.");
             RuleFor(x => x.ShortDescription).NotEmpty().WithMessage("Mô tả ngắn không được để trống.")
-                .MaximumLength(100)
-                .WithMessage("Mô tả ngắn không quá 100 ký tự.");
+                .MaximumLength(300)
+                .WithMessage("Mô tả ngắn không quá 300 ký tự.");
             RuleFor(x => x.Description).NotEmpty().WithMessage("Mô tả không được để trống.")
               .MaximumLength(1000)
               .WithMessage("Mô tả không quá 1000 ký tự.");
