@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
             {
                 return NotFound("Không tìm thấy đối tác bạn yêu cầu!");
             }
-            var warehouse = await _context.Warehouse.AsNoTracking().Where(x => x.IsDeleted == false && x.ProviderId == id && x.IsDisplay == true).ToListAsync();
+            var warehouse = await _context.Warehouse.AsNoTracking().Include(i => i.ImageWarehouses).Where(x => x.IsDeleted == false && x.ProviderId == id && x.IsDisplay == true).ToListAsync();
             var result = _mapper.Map<IList<WarehouseViewModel>>(warehouse);
             return Ok(result);
         }
@@ -78,7 +78,7 @@ namespace WebAPI.Controllers
             {
                 return NotFound("Không tìm thấy danh mục kho bạn yêu cầu!");
             }
-            var warehouse = await _context.Warehouse.AsNoTracking().Where(x => x.IsDeleted == false && x.CategoryId == id && x.IsDisplay == true).ToListAsync();
+            var warehouse = await _context.Warehouse.AsNoTracking().Include(w => w.Category).Include(w => w.Provider).Include(w => w.ImageWarehouses).Where(x => x.IsDeleted == false && x.CategoryId == id && x.IsDisplay == true).ToListAsync();
             var result = _mapper.Map<IList<WarehouseViewModel>>(warehouse);
             return Ok(result);
         }
