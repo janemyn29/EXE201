@@ -57,7 +57,10 @@ namespace Infrastructures.Mappers
             CreateMap<HashtagViewModel, Hashtag>().ReverseMap();
 
             CreateMap<CreatePostViewModel, Post>().ReverseMap();
-            CreateMap<PostViewModel, Post>().ReverseMap();
+            CreateMap<Post, PostViewModel>()
+                .ForMember(des => des.NamePostCategory, src => src.MapFrom(x => x.PostCategory.Name))
+                .ForMember(des => des.FullnameAuthor, src => src.MapFrom(x => x.Author.Fullname))
+                .ReverseMap();
             CreateMap<UpdatePostViewModel, Post>().ReverseMap();
 
 
