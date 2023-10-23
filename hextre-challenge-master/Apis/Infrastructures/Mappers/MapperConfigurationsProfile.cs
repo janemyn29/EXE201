@@ -28,7 +28,9 @@ namespace Infrastructures.Mappers
 
             CreateMap<CreateProviderViewModel, Provider>().ReverseMap();
             CreateMap<UpdateProviderViewModel, Provider>().ReverseMap();
-            CreateMap<ProviderViewModel, Provider>().ReverseMap();
+
+            CreateMap<Provider, ProviderViewModel>().ForMember(des => des.WarehousesCount, src => src.MapFrom(x => x.Warehouses.Count))
+                .ReverseMap();
 
             CreateMap<WarehoureUpdateModel, Warehouse>().ReverseMap();
             CreateMap<WarehourseCreateModel, Warehouse>().ReverseMap();

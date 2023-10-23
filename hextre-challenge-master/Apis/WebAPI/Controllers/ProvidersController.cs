@@ -46,5 +46,15 @@ namespace WebAPI.Controllers
             var result = _mapper.Map<ProviderViewModel>(providers);
             return result;
         }
+
+        [HttpGet("QuantityWarehouses")]
+        public async Task<IActionResult> QuantityWarehouses()
+        {
+            var providers = await _context.Provider.Include(x => x.Warehouses).AsNoTracking().Where(x => x.IsDeleted == false && x.IsDisplay == true).ToListAsync();
+
+            var result = _mapper.Map<IList<ProviderViewModel>>(providers);
+
+            return Ok(result);
+        }
     }
 }

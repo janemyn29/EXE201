@@ -17,5 +17,6 @@ namespace Application.ViewModels.ProviderViewModels
         public string Description { get; set; }
         public string Address { get; set; }
         public bool IsDisplay { get; set; }
+        public int WarehousesCount { get; set; }
     }
 }
