@@ -10,7 +10,7 @@ namespace Domain.Enums
     {
         Pending = 1,
         Expired = 2,
-        OnHold = 3,
+        OnGoing = 3,
         Terminating = 4,
         Cancelled = 5
     }

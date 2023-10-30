@@ -11,5 +11,6 @@ namespace Application.ViewModels.OrderViewModels
     {
         public Guid Id { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public DateTime? PickupDay { get; set; }
     }
 }

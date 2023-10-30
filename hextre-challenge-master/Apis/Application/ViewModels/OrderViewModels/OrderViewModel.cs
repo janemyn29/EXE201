@@ -16,19 +16,23 @@ namespace Application.ViewModels.OrderViewModels
         public string CustomerId { get; set; }
         public bool ContactInDay { get; set; }
         public int TotalCall { get; set; }
-        public OrderStatus OrderStatus { get; set; }
+        public string OrderStatus { get; set; }
         public string? CancelReason { get; set; }
         public double WarehousePrice { get; set; }
         public double ServicePrice { get; set; }
         public double TotalPrice { get; set; }
         public double Deposit { get; set; }
-
         public double Width { get; set; }
         public double Height { get; set; }
         public double Depth { get; set; }
         public string UnitType { get; set; }
         public string PaymentStatus { get; set; }
+        public DateTime? DeletionDate { get; set; }
+
+        public Guid? DeleteBy { get; set; }
 
         public virtual WarehouseDetail WarehouseDetail { get; set; }
+        public virtual ApplicationUser Customer { get; set; }
+        public IList<DepositPayment> DepositPayments { get; set; }
     }
 }

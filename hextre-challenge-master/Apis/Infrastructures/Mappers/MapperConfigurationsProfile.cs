@@ -11,6 +11,7 @@ using Application.ViewModels.OrderViewModels;
 using Application.ViewModels.PostCategoryViewModels;
 using Application.ViewModels.HashtagViewModels;
 using Application.ViewModels.PostViewModels;
+using Application.ViewModels.ContractViewModels;
 
 namespace Infrastructures.Mappers
 {
@@ -64,6 +65,9 @@ namespace Infrastructures.Mappers
                 .ForMember(des => des.FullnameAuthor, src => src.MapFrom(x => x.Author.Fullname))
                 .ReverseMap();
             CreateMap<UpdatePostViewModel, Post>().ReverseMap();
+
+
+            CreateMap<ContractModel, Contract>().ReverseMap();
 
 
         }

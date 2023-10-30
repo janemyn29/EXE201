@@ -12,6 +12,7 @@ using Application.ViewModels.OrderViewModels;
 using AutoMapper;
 using Application;
 using Domain.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
@@ -22,19 +23,25 @@ namespace WebAPI.Areas.Admin.Controllers
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unit;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrdersController(AppDbContext context, IMapper mapper, IUnitOfWork unit)
+        public OrdersController(AppDbContext context, IMapper mapper, IUnitOfWork unit, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _mapper = mapper;
             _unit = unit;
+            _userManager = userManager;
         }
 
         // GET: api/Orders
         [HttpGet]
         public async Task<ActionResult> GetOrder()
         {
-            var orders = await _context.Order.AsNoTracking().Where(x => x.IsDeleted == false).ToListAsync();
+            var orders = await _context.Order.AsNoTracking().Include(x => x.Customer).Where(x => x.IsDeleted == false).ToListAsync();
+            foreach (var item in orders)
+            {
+                item.Customer.OrderDetail = null;
+            }
             var result = _mapper.Map<IList<OrderViewModel>>(orders);
             return Ok(result);
         }
@@ -42,7 +49,11 @@ namespace WebAPI.Areas.Admin.Controllers
         [HttpGet("Filter")]
         public async Task<ActionResult> OrderFilter(OrderStatus orderStatus)
         {
-            var orders = await _context.Order.AsNoTracking().Where(x => x.IsDeleted == false && x.OrderStatus == orderStatus).ToListAsync();
+            var orders = await _context.Order.AsNoTracking().Include(x=>x.Customer).Where(x => x.IsDeleted == false && x.OrderStatus == orderStatus).ToListAsync();
+            foreach (var item in orders)
+            {
+                item.Customer.OrderDetail = null;
+            }
             var result = _mapper.Map<IList<OrderViewModel>>(orders);
             return Ok(result);
         }
@@ -55,12 +66,13 @@ namespace WebAPI.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var category = await _context.Order.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
-
+            var category = await _context.Order.AsNoTracking().Include(x => x.Customer).SingleOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+            
             if (category == null)
             {
                 return NotFound("Không tìm thấy đơn hàng bạn yêu cầu!");
             }
+            category.Customer.OrderDetail = null;
             var result = _mapper.Map<OrderViewModel>(category);
             return Ok(result);
         }
@@ -92,11 +104,11 @@ namespace WebAPI.Areas.Admin.Controllers
             }
         }
 
-
-        [HttpPut("UpdateStatus")]
-        public async Task<IActionResult> UpdateStatus(UpdateOrderStatusModel model)
+        [HttpPut("AssignOrder/{id}")]
+        public async Task<IActionResult> AssignOrder(Guid id, string StaffId)
         {
-            var order = await _unit.OrderRepository.GetByIdAsync(model.Id);
+            var order = await _unit.OrderRepository.GetByIdAsync(id);
+           
             if (order == null)
             {
                 return NotFound("Không tìm thấy đơn hàng mà bạn yêu cầu!");
@@ -105,7 +117,52 @@ namespace WebAPI.Areas.Admin.Controllers
             {
                 try
                 {
+                    var staff = await _userManager.FindByIdAsync(StaffId);
+                    if (staff == null)
+                    {
+                        NotFound("Không tìm thấy nhân viên mà bạn yêu cầu!");
+                    }
+                    if (await _userManager.IsInRoleAsync(staff, "Staff"))
+                    {
+                        order.DeleteBy = Guid.Parse(StaffId);
+                        _unit.OrderRepository.Update(order);
+                        await _unit.SaveChangeAsync();
+
+                    }
+                    else
+                    {
+                        NotFound("Không phải nhân viên!");
+                    }
+                    return Ok("Giao đơn hàng cho nhân viên thành công!");
+
+
+                }
+                catch (Exception ex)
+                {
+                    return NotFound("Đã có lỗi xảy ra trong quá trình cập nhật đơn hàng!");
+                }
+            }
+        }
+
+
+        [HttpPut("UpdateStatus")]
+        public async Task<IActionResult> UpdateStatus(UpdateOrderStatusModel model)
+        {
+            var order = await _unit.OrderRepository.GetByIdAsync(model.Id);
+            if (order == null)
+            {
+                return NotFound("Không tìm thấy đơn hàng mà bạn yêu cầu!");
+            }else if (model.PickupDay < DateTime.Now)
+            {
+
+                return NotFound("Ngày vận chuyển không thể nhỏ hơn ngày hiện tại!");
+            }
+            else
+            {
+                try
+                {
                     order.OrderStatus = model.OrderStatus;
+                    order.DeletionDate = model.PickupDay;
                     _unit.OrderRepository.Update(order);
                     await _unit.SaveChangeAsync();
                     return Ok("Cập nhật đơn hàng thành công!");
@@ -116,6 +173,8 @@ namespace WebAPI.Areas.Admin.Controllers
                 }
             }
         }
+
+        
 
         // POST: api/Orders
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
