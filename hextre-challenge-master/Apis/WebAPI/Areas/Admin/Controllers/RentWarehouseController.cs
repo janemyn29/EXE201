@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Admin/api/[controller]")]
     [ApiController]
     public class RentWarehouseController : ControllerBase
     {
