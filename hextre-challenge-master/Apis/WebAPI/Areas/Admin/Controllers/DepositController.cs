@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Admin/api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin,Staff")]
     public class DepositController : ControllerBase

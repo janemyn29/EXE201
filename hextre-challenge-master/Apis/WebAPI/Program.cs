@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 
 //builder.Environment.EnvironmentName = "Staging"; //for branch develop
-builder.Environment.EnvironmentName = "Production"; //for branch domain 
+//builder.Environment.EnvironmentName = "Production"; //for branch domain 
 builder.Configuration
     .AddJsonFile("appsettings.json", false, true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", false, true)

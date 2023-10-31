@@ -33,7 +33,10 @@ namespace Infrastructures
         public DbSet<PostHashtag> PostHashtag { get; set; }
         public DbSet<RentWarehouse> RentWarehouse { get; set; }
 
-        //public DbSet<DepositPayment> DepositPayment { get; set; }
+        public DbSet<Good> Good { get; set; }
+        public DbSet<GoodImage> GoodImage { get; set; }
+        public DbSet<Request> Request { get; set; }
+        public DbSet<RequestDetail> RequestDetail { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

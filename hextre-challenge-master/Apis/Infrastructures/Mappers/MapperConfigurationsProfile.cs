@@ -13,6 +13,8 @@ using Application.ViewModels.HashtagViewModels;
 using Application.ViewModels.PostViewModels;
 using Application.ViewModels.ContractViewModels;
 using Application.ViewModels.AuthViewModel;
+using Application.ViewModels.GoodViewModels;
+using Application.ViewModels.RequestViewModels;
 
 namespace Infrastructures.Mappers
 {
@@ -72,6 +74,9 @@ namespace Infrastructures.Mappers
 
 
             CreateMap<ApplicationUser, UpdateAuthViewModel>().ReverseMap();
+            CreateMap<GoodViewModel, Good>().ReverseMap();
+            CreateMap<RequestModel, Request>().ReverseMap();
+
         }
     }
 }
