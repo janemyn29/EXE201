@@ -12,6 +12,7 @@ using Application.ViewModels.PostCategoryViewModels;
 using Application.ViewModels.HashtagViewModels;
 using Application.ViewModels.PostViewModels;
 using Application.ViewModels.ContractViewModels;
+using Application.ViewModels.AuthViewModel;
 
 namespace Infrastructures.Mappers
 {
@@ -70,6 +71,7 @@ namespace Infrastructures.Mappers
             CreateMap<ContractModel, Contract>().ReverseMap();
 
 
+            CreateMap<ApplicationUser, UpdateAuthViewModel>().ReverseMap();
         }
     }
 }
