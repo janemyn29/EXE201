@@ -11,7 +11,7 @@ namespace WebAPI.Areas.Admin.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[Authorize(Roles = ("Admin"))]
+    [Authorize(Roles = "Admin,Staff")]
     public class PostHashtagController : ControllerBase
     {
         private readonly IPostHashtagService _postHashtagService;

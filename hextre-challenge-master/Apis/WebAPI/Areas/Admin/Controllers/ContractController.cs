@@ -4,6 +4,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Infrastructures;
 using MailKit.Search;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize(Roles = "Admin,Staff")]
+    [Route("Admin/api/[controller]")]
     [ApiController]
     public class ContractController : ControllerBase
     {

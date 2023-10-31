@@ -9,7 +9,7 @@ namespace WebAPI.Areas.Admin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles =("Admin"))]
+    [Authorize(Roles = "Admin,Staff")]
     public class PostCategoryController : ControllerBase
     {
         private readonly IPostCategoryService _postCategoryService;

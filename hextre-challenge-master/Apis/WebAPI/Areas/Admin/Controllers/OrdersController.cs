@@ -13,11 +13,13 @@ using AutoMapper;
 using Application;
 using Domain.Enums;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
     [Route("Admin/api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Staff")]
     public class OrdersController : ControllerBase
     {
         private readonly AppDbContext _context;

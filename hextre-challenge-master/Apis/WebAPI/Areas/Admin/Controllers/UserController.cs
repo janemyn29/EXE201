@@ -3,6 +3,7 @@ using Application.ViewModels.AuthViewModel;
 using Application.ViewModels.UserViewModels;
 using Domain.Entities;
 using Infrastructures;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace WebAPI.Areas.Admin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Staff")]
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
