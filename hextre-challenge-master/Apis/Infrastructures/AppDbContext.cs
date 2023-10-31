@@ -31,7 +31,9 @@ namespace Infrastructures
         public DbSet<Order> Order { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<PostHashtag> PostHashtag { get; set; }
+        public DbSet<RentWarehouse> RentWarehouse { get; set; }
 
+        //public DbSet<DepositPayment> DepositPayment { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

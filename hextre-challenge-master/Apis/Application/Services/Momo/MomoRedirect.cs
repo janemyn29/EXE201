@@ -17,7 +17,7 @@ namespace Application.Services.Momo
         public long transId { get; set; }
         public int resultCode { get; set; }
         public string message { get; set; }
-        public string payType { get; set; }
+        public string? payType { get; set; }
         public long responseTime { get; set; }
         public string extraData { get; set; }
         public string signature { get; set; }
