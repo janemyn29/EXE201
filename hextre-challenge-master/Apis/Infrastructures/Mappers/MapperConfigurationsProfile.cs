@@ -11,6 +11,7 @@ using Application.ViewModels.OrderViewModels;
 using Application.ViewModels.PostCategoryViewModels;
 using Application.ViewModels.HashtagViewModels;
 using Application.ViewModels.PostViewModels;
+using Application.ViewModels.AuthViewModel;
 
 namespace Infrastructures.Mappers
 {
@@ -65,7 +66,7 @@ namespace Infrastructures.Mappers
                 .ReverseMap();
             CreateMap<UpdatePostViewModel, Post>().ReverseMap();
 
-
+            CreateMap<ApplicationUser, UpdateAuthViewModel>().ReverseMap();
         }
     }
 }

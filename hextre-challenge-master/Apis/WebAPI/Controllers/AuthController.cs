@@ -2,7 +2,9 @@
 using Application.Services;
 using Application.ViewModels;
 using Application.ViewModels.AuthViewModel;
+using AutoMapper;
 using Domain.Entities;
+using FluentValidation;
 using Infrastructures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -28,13 +30,15 @@ namespace WebAPI.Controllers
         private readonly IAuthorizationService _authorizationService;
         private readonly IConfiguration _configuration;
         public readonly IWebHostEnvironment _environment;
+        public readonly IMapper _mapper;
 
         public AuthController(UserManager<ApplicationUser> userManager,
              SignInManager<ApplicationUser> signInManager,
             IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
             IAuthorizationService authorizationService,
             IConfiguration configuration,
-            IWebHostEnvironment environment)
+            IWebHostEnvironment environment,
+            IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -42,6 +46,7 @@ namespace WebAPI.Controllers
             _authorizationService = authorizationService;
             _configuration = configuration;
             _environment = environment;
+            _mapper = mapper;
         }
         [HttpPost]
         [Route("/Login")]
@@ -199,6 +204,73 @@ namespace WebAPI.Controllers
                 return BadRequest("Xác nhận Email không thành công! Link xác nhận không chính xác hoặc đã hết hạn! Vui lòng sử dụng đúng link được gửi từ WarehouseBridge tới Email của bạn!");
 
             }
+        }
+
+        [HttpPut]
+        [Route("/UpdateInfo")]
+        public async Task<IActionResult> UpdateInfo(UpdateAuthViewModel userViewModel)
+        {
+            try
+            {
+                var validator = new UpdateAuthModelValidator();
+                var result = validator.Validate(userViewModel);
+                if (result.IsValid)
+                {
+                    var existUsernameUser = await _userManager.FindByNameAsync(userViewModel.UserName);
+
+                    if (existUsernameUser == null)
+                    {
+                        return NotFound("Không tìm thấy người dùng");
+                    }
+
+
+                    await _userManager.UpdateAsync(_mapper.Map(userViewModel, existUsernameUser));
+
+                    return Ok("Cập nhật tài khoản thành công");
+                }
+                else
+                {
+                    ErrorViewModel errors = new ErrorViewModel();
+                    errors.Errors = new List<string>();
+                    errors.Errors.AddRange(result.Errors.Select(x => x.ErrorMessage));
+                    return BadRequest(errors);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+        }
+
+        [HttpPut]
+        [Route("/UpdatePassword")]
+        public async Task<IActionResult> UpdatePassword(string userName, string pass, string confirmPass)
+        {
+            try
+            {
+                if (pass is null) throw new Exception("Mật khẩu không được để trống.");
+
+                if (pass.Length > 50) throw new Exception("Mật khẩu không quá 50 ký tự.");
+
+                if (!pass.Equals(confirmPass)) throw new Exception("Mật khẩu không khớp");
+
+                var existUsernameUser = await _userManager.FindByNameAsync(userName);
+
+                if (existUsernameUser == null)
+                {
+                    return NotFound("Không tìm thấy người dùng");
+                }
+
+                var token = await _userManager.GeneratePasswordResetTokenAsync(existUsernameUser);
+
+                return Ok(await _userManager.ResetPasswordAsync(existUsernameUser, token, pass));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
     }
 }
