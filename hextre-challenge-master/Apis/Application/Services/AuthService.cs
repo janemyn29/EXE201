@@ -67,7 +67,7 @@ namespace Application.Services
                     var userModel = new LoginViewModel();
                     userModel.Id = user.Id;
                     userModel.Email = user.Email;
-                    userModel.FullName = user.Fullname;
+                    userModel.Fullname = user.Fullname;
                     userModel.Username = user.UserName;
                     userModel.Avatar = user.Avatar;
                     userModel.listRoles = roles.ToList();
