@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace Application.ViewModels.PostViewModels
         public string Image { get; set; }
         public string ShortDescription { get; set; }
         public string Description { get; set; }
+        public List<string> HashtagName { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

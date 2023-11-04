@@ -9,7 +9,6 @@ namespace WebAPI.Areas.Admin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Staff")]
     public class PostController : ControllerBase
     {
         private readonly IPostService _postService;
@@ -26,8 +25,8 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = ("Admin"))]
-        public async Task<IActionResult> Post(CreatePostViewModel createPostViewModel)
+        [Authorize(Roles = "Admin,Staff")]
+        public async Task<IActionResult> CreatePost(CreatePostViewModel createPostViewModel)
         {
             try
             {
@@ -44,7 +43,7 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = ("Admin"))]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> UpdatePost(UpdatePostViewModel updatePostViewModel)
         {
             try
@@ -62,7 +61,7 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = ("Admin"))]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> DeletePost(Guid id)
         {
             try

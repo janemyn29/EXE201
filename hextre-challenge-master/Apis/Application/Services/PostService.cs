@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.ViewModels.PostHashtagViewModels;
 using Application.ViewModels.PostViewModels;
 using AutoMapper;
 using Domain.Entities;
@@ -27,11 +28,23 @@ namespace Application.Services
 
         public async Task<List<PostViewModel>> GetPost()
         {
-            var post = await _unitOfWork.PostRepository.GetAllAsync();
+            var post = _unitOfWork.PostRepository.GetAllAsync().Result.Where(x => x.IsDeleted == false).ToList();
+     
+            List<PostViewModel> listPostViewModel = new List<PostViewModel>();
 
-            var mapper = _mapper.Map<List<PostViewModel>>(post.Where(x => x.IsDeleted == false));
+            foreach (var item in post)
+            {
 
-            return mapper;
+                var nameHasTag = _unitOfWork.PostHashtagRepository.GetAllAsync().Result.Where(x => x.PostId == item.Id).Select(x => x.Hashtag.HashtagName).ToList();
+
+                var mapper = _mapper.Map<PostViewModel>(item);
+
+                mapper.HashtagName = nameHasTag;
+
+                listPostViewModel.Add(mapper);
+            }
+
+            return listPostViewModel;
         }
 
         public async Task<bool> CreatePost(CreatePostViewModel createPostViewModel)
@@ -42,6 +55,8 @@ namespace Application.Services
             if (postCategory != null)
             {
                 var mapper = _mapper.Map<Post>(createPostViewModel);
+
+                mapper.AuthorId = _claimsService.GetCurrentUserId.ToString();
 
                 await _unitOfWork.PostRepository.AddAsync(mapper);
 
@@ -59,6 +74,8 @@ namespace Application.Services
             {
 
                 var mapper = _mapper.Map<Post>(updatePostViewModel);
+
+                mapper.AuthorId = _claimsService.GetCurrentUserId.ToString();
 
                 _unitOfWork.PostRepository.Update(mapper);
 

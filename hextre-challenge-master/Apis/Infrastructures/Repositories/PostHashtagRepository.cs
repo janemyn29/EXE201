@@ -27,5 +27,10 @@ namespace Infrastructures.Repositories
         {
             return await _context.PostHashtag.Where(x => x.IsDeleted == false).FirstOrDefaultAsync(x => x.PostId == postId && x.HashtagId == hashtagId);
         }
+
+        public override async Task<List<PostHashtag>> GetAllAsync()
+        {
+            return await _dbSet.Include(x => x.Hashtag).ToListAsync();
+        }
     }
 }
