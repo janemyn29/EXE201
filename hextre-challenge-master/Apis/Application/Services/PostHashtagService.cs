@@ -127,14 +127,14 @@ namespace Application.Services
 
                 if (await _unitOfWork.HashtagRepository.GetByIdAsync(item) is null)
                 {
-                    throw new Exception("Không tìm thấy Hashtag");
+                    throw new Exception("Không tìm thấy Hashtag.");
                 }
             }
 
             var checkPost = await _unitOfWork.PostRepository.GetByIdAsync(hashtagViewModel.PostId);
 
             if (checkPost is null)
-                throw new Exception("Không tìm thấy bài đăng");
+                throw new Exception("Không tìm thấy bài đăng.");
 
             /*foreach (var item in hashtagViewModel.HashtagId)
             {
