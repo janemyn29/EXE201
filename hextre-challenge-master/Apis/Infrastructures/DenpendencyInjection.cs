@@ -26,7 +26,7 @@ namespace Infrastructures
             services.AddScoped<IHashtagService, HashtagService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IPostHashtagService, PostHashtagService>();
-
+            services.AddScoped<IRequestService, RequestService>();
 
             services.AddScoped<IChemicalRepository, ChemicalRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -42,7 +42,7 @@ namespace Infrastructures
             services.AddScoped<IHashtagRepository, HashtagRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IPostHashtagRepository, PostHashtagRepository>();
-            
+            services.AddScoped<IRequestRepository, RequestRepository>();
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
 

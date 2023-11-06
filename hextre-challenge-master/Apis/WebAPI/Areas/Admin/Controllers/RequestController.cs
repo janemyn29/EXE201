@@ -1,11 +1,15 @@
-﻿using Application.ViewModels.RequestViewModels;
+﻿using Application.Interfaces;
+using Application.ViewModels.PostViewModels;
+using Application.ViewModels.RequestViewModels;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructures;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
@@ -16,12 +20,15 @@ namespace WebAPI.Areas.Admin.Controllers
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IRequestService _requestService;
 
-        public RequestController(AppDbContext context,IMapper mapper, UserManager<ApplicationUser> userManager)
+
+        public RequestController(AppDbContext context,IMapper mapper, UserManager<ApplicationUser> userManager, IRequestService requestService)
         {
             _context = context;
             _mapper = mapper;
             _userManager = userManager;
+            _requestService = requestService;
         }
         [HttpGet]
         public async Task<IActionResult> Get(Guid rentWarehouse)
@@ -44,6 +51,24 @@ namespace WebAPI.Areas.Admin.Controllers
                 item.StaffName = staff.Fullname;
             }
             return Ok(result);
+        }
+
+        [HttpPost]
+/*        [Authorize(Roles = "Admin,Staff")]*/
+        public async Task<IActionResult> CreateRequest(CreateRequestViewModel createRequestViewModel)
+        {
+            try
+            {
+                var result = await _requestService.CreateRequest(createRequestViewModel);
+                return Ok(new
+                {
+                    Result = "Tạo thành công."
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

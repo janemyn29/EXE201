@@ -20,6 +20,7 @@ namespace Infrastructures
         private readonly IHashtagRepository _hashtagRepository;
         private readonly IPostRepository _postRepository;
         private readonly IPostHashtagRepository _postHashtagRepository;
+        private readonly IRequestRepository _requestRepository;
 
         public UnitOfWork(AppDbContext dbContext,
             IChemicalRepository chemicalRepository,
@@ -34,7 +35,8 @@ namespace Infrastructures
             IPostCategoryRepository postCategoryRepository,
             IHashtagRepository hashtagRepository,
             IPostRepository postRepository,
-            IPostHashtagRepository postHashtagRepository)
+            IPostHashtagRepository postHashtagRepository,
+            IRequestRepository RequestRepository)
         {
             _dbContext = dbContext;
             _chemicalRepository = chemicalRepository;
@@ -50,6 +52,7 @@ namespace Infrastructures
             _hashtagRepository = hashtagRepository;
             _postRepository = postRepository;
             _postHashtagRepository = postHashtagRepository;
+            _requestRepository = RequestRepository;
         }
         public IChemicalRepository ChemicalRepository => _chemicalRepository;
 
@@ -76,6 +79,8 @@ namespace Infrastructures
         public IPostRepository PostRepository => _postRepository;
 
         public IPostHashtagRepository PostHashtagRepository => _postHashtagRepository;
+
+        public IRequestRepository RequestRepository => _requestRepository;
 
         public async Task<int> SaveChangeAsync()
         {

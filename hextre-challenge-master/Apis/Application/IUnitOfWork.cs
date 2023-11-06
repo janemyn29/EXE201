@@ -20,6 +20,8 @@ namespace Application
         public IPostRepository PostRepository { get; }
         public IPostHashtagRepository PostHashtagRepository { get; }
 
+        public IRequestRepository RequestRepository { get; }
+
         public Task<int> SaveChangeAsync();
     }
 }
