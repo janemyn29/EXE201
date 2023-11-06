@@ -9,7 +9,6 @@ namespace WebAPI.Areas.Admin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Staff")]
     public class PostCategoryController : ControllerBase
     {
         private readonly IPostCategoryService _postCategoryService;
@@ -27,6 +26,7 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> PostCategory(CreatePostCategoryViewModel createPostCategoryViewModel)
         {
             try
@@ -43,6 +43,7 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> UpdatePostCategory(UpdatePostCategoryViewModel updatePostCategoryViewModel)
         {
             try
@@ -59,6 +60,7 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> DeletePostCategory(Guid id)
         {
             try

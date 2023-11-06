@@ -7,7 +7,6 @@ namespace WebAPI.Areas.Admin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Staff")]
     public class HashtagController : ControllerBase
     {
         private readonly IHashtagService _hashtagService;
@@ -25,6 +24,7 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> PostHashtag(CreateHashtagViewModel createHashtagView)
         {
             try
@@ -41,6 +41,7 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> UpdateHashtag(UpdateHashtagViewModel updateHashtagView)
         {
             try
@@ -58,6 +59,7 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> DeleteHashtag(Guid id)
         {
             try
