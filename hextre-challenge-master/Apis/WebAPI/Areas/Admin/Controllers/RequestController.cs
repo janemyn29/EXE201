@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Services;
 using Application.ViewModels.PostViewModels;
 using Application.ViewModels.RequestViewModels;
 using AutoMapper;
@@ -54,7 +55,7 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-/*        [Authorize(Roles = "Admin,Staff")]*/
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> CreateRequest(CreateRequestViewModel createRequestViewModel)
         {
             try
@@ -63,6 +64,42 @@ namespace WebAPI.Areas.Admin.Controllers
                 return Ok(new
                 {
                     Result = "Tạo thành công."
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "Admin,Staff")]
+        public async Task<IActionResult> UpdateRequest(UpdateRequestViewModel updateRequestViewModel)
+        {
+            try
+            {
+                var result = await _requestService.UpdateRequest(updateRequestViewModel);
+                return Ok(new
+                {
+                    Reuslt = "Cập nhật thành công."
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Staff")]
+        public async Task<IActionResult> DeleteRequest(Guid id)
+        {
+            try
+            {
+                var result = await _requestService.DeleteRequest(id);
+                return Ok(new
+                {
+                    Result = "Xoá thành công."
                 });
             }
             catch (Exception ex)

@@ -21,6 +21,7 @@ namespace Application
         public IPostHashtagRepository PostHashtagRepository { get; }
 
         public IRequestRepository RequestRepository { get; }
+        public IRequestDetailRepository RequestDetailRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }
