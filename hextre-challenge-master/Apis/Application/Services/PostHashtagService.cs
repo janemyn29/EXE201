@@ -40,7 +40,7 @@ namespace Application.Services
             var checkPost = await _unitOfWork.PostRepository.GetByIdAsync(createPostHashtag.PostId);
 
             if (checkPost is null)
-                throw new Exception("Không tìm thấy Post");
+                throw new Exception("Không tìm thấy bải đăng");
 
             foreach (var item in createPostHashtag.HashtagId)
             {
@@ -50,7 +50,7 @@ namespace Application.Services
                 }
                 await _unitOfWork.PostHashtagRepository.AddAsync(new PostHashtag { PostId = createPostHashtag.PostId, HashtagId = item });
 
-                if (await _unitOfWork.SaveChangeAsync() == 0) throw new Exception("Create faild.");
+                if (await _unitOfWork.SaveChangeAsync() == 0) throw new Exception("Tạo Hashtag thất bại.");
             }
             return true;
         }
@@ -60,11 +60,11 @@ namespace Application.Services
             var result = await _unitOfWork.PostHashtagRepository.GetByIdAsync(id);
 
             if (result == null)
-                throw new Exception("Don't found this Post");
+                throw new Exception("Không tìm thấy bài đăng này.");
             else
             {
                 _unitOfWork.PostHashtagRepository.SoftRemove(result);
-                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Delete Post faild.");
+                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Xoá HashTag thất bại");
             }
         }
 
@@ -134,7 +134,7 @@ namespace Application.Services
             var checkPost = await _unitOfWork.PostRepository.GetByIdAsync(hashtagViewModel.PostId);
 
             if (checkPost is null)
-                throw new Exception("Không tìm thấy Post");
+                throw new Exception("Không tìm thấy bài đăng");
 
             /*foreach (var item in hashtagViewModel.HashtagId)
             {
@@ -159,7 +159,7 @@ namespace Application.Services
                 
                 _unitOfWork.PostHashtagRepository.Update(hashPost);
 
-                if (await _unitOfWork.SaveChangeAsync() == 0) throw new Exception("Update faild.");
+                if (await _unitOfWork.SaveChangeAsync() == 0) throw new Exception("Cập nhật thất bại.");
             }
             return true;
         }

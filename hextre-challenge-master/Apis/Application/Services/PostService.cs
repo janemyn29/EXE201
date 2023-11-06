@@ -60,9 +60,9 @@ namespace Application.Services
 
                 await _unitOfWork.PostRepository.AddAsync(mapper);
 
-                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Add Post faild.");
+                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Tạo bài đăng thất bại.");
             }
-            throw new Exception("PostCategory not found");
+            throw new Exception("Không tìm thấy danh mục bài viết.");
         }
 
         public async Task<bool> UpdatePost(UpdatePostViewModel updatePostViewModel)
@@ -79,9 +79,9 @@ namespace Application.Services
 
                 _unitOfWork.PostRepository.Update(mapper);
 
-                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Update Post faild.");
+                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Câp nhật bài đăng thất bại.");
             }
-            throw new Exception("PostCategory not found");
+            throw new Exception("Không tìm thấy danh mục bài viết.");
         }
 
         public async Task<bool> DeletePost(Guid id)
@@ -89,11 +89,11 @@ namespace Application.Services
             var result = await _unitOfWork.PostRepository.GetByIdAsync(id);
 
             if (result == null)
-                throw new Exception("Don't found this Post");
+                throw new Exception("Không tìm thấy bài đăng này.");
             else
             {
                 _unitOfWork.PostRepository.SoftRemove(result);
-                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Delete Post faild.");
+                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Xoá bài đăng thất bại.");
             }
         }
     }

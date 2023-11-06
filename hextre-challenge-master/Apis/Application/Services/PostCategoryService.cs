@@ -38,7 +38,7 @@ namespace Application.Services
 
             await _unitOfWork.PostCategoryRepository.AddAsync(mapper);
 
-            return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Add PostCategory faild.");
+            return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Tạo danh mục bài đăng thất bại.");
         }
 
         public async Task<bool> UpdatePostCategory(UpdatePostCategoryViewModel updatePostCategoryViewModel)
@@ -47,7 +47,7 @@ namespace Application.Services
 
             _unitOfWork.PostCategoryRepository.Update(mapper);
 
-            return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Update PostCategory faild.");
+            return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Cập nhật danh mục bài đăng thất bại.");
         }
 
         public async Task<bool> DeletePostCategory(Guid id)
@@ -55,12 +55,12 @@ namespace Application.Services
             var result = await _unitOfWork.PostCategoryRepository.GetByIdAsync(id);
 
             if (result == null)
-                throw new Exception("Don't found this PostCategory");
+                throw new Exception("Không tìm thấy danh mục bài đăng.");
             else
             {
                 _unitOfWork.PostCategoryRepository.SoftRemove(result);
 
-                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Delete PostCategory faild.");
+                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Xoá danh mục bài đăng thất bại.");
             }
         }
     }

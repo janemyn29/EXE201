@@ -33,7 +33,7 @@ namespace WebAPI.Areas.Admin.Controllers
                 var result = await _postService.CreatePost(createPostViewModel);
                 return Ok(new
                 {
-                    Result = "Create successfully."
+                    Result = "Tạo thành công."
                 });
             }
             catch (Exception ex)
@@ -51,7 +51,7 @@ namespace WebAPI.Areas.Admin.Controllers
                 var result = await _postService.UpdatePost(updatePostViewModel);
                 return Ok(new
                 {
-                    Reuslt = "Update successfully."
+                    Reuslt = "Cập nhật thành công."
                 });
             }
             catch (Exception ex)
@@ -69,7 +69,7 @@ namespace WebAPI.Areas.Admin.Controllers
                 var result = await _postService.DeletePost(id);
                 return Ok(new
                 {
-                    Result = "Delete successfully."
+                    Result = "Xoá thành công."
                 });
             }
             catch (Exception ex)

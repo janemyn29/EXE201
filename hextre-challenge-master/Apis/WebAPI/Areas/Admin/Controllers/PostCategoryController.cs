@@ -33,7 +33,7 @@ namespace WebAPI.Areas.Admin.Controllers
             {
                 var result = await _postCategoryService.CreatePostCategory(createPostCategoryViewModel);
                 return Ok(new { 
-                    Result = "Create successfully."
+                    Result = "Tạo thành công."
                 });
             }
             catch (Exception ex)
@@ -49,7 +49,7 @@ namespace WebAPI.Areas.Admin.Controllers
             {
                 var result = await _postCategoryService.UpdatePostCategory(updatePostCategoryViewModel);
                 return Ok(new { 
-                    Reuslt = "Update successfully."
+                    Reuslt = "Cập nhật thành công."
                 });
             }
             catch (Exception ex)
@@ -65,7 +65,7 @@ namespace WebAPI.Areas.Admin.Controllers
             {
                 var result = await _postCategoryService.DeletePostCategory(id);
                 return Ok(new { 
-                    Result = "Delete successfully."
+                    Result = "Xoá thành công."
                 });
             }
             catch (Exception ex)

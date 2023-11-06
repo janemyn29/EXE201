@@ -39,7 +39,7 @@ namespace WebAPI.Areas.Admin.Controllers
             try
             {
                 await _postHashtagService.CreatePostHashtag(createPostHashtagView);
-                return Ok("Create successfully.");
+                return Ok("Tạo thành công.");
 
             }
             catch (Exception ex)
@@ -54,7 +54,7 @@ namespace WebAPI.Areas.Admin.Controllers
             try
             {
                 await _postHashtagService.UpdatePostHashtag(hashtagViewModel);
-                return Ok("Update successfully.");
+                return Ok("Cập nhật thành công.");
             }
             catch (Exception ex)
             {
@@ -68,7 +68,7 @@ namespace WebAPI.Areas.Admin.Controllers
             try
             {
                 await _postHashtagService.DeletePostHashtag(id);
-                return Ok("Delete successfully.");
+                return Ok("Xoá thành công.");
             }
             catch (Exception ex)
             {
