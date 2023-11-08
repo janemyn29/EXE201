@@ -54,7 +54,7 @@ namespace Application.Services
             if (user.EmailConfirmed == false)
             {
                 var result = await SendEmailConfirmAsync(email.Trim(), callbackUrl);
-                throw new Exception("Tài khoản này chưa xác thực Email. Vui lòng kiểm tra Email được vừa gửi đến hoặc liên hệ quản trị viên để được hỗ trợ!");
+                throw new Exception("This account has not authenticated Email. Please check the email you just sent or contact the administrator for support!");
             }
             else
             {

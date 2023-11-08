@@ -4,6 +4,7 @@ using Application.ViewModels.ImageWarehouseViewModels;
 using Application.ViewModels.WarehouseViewModel;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace Infrastructures.Repositories
             var myTransaction = _context.Database.BeginTransaction();
             try
             {
-
+                
                 var warehouseId = await CreateWarehouse(warehouse);
                 foreach (var item in listImages)
                 {
@@ -50,6 +51,16 @@ namespace Infrastructures.Repositories
         {
             try
             {
+                var provider = await _context.Provider.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == model.ProviderId);
+                if(provider == null)
+                {
+                    throw new Exception("Không tìm thấy nhà cung cấp này");
+                }
+                var cate = await _context.Category.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == model.CategoryId);
+                if (cate == null)
+                {
+                    throw new Exception("Không tìm thấy danh mục này");
+                }
                 var warehouse = _mapper.Map<Warehouse>(model);
                 warehouse.IsDisplay = true;
                 await _context.Warehouse.AddAsync(warehouse);

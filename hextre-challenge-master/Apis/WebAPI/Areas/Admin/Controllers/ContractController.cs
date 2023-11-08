@@ -120,7 +120,7 @@ namespace WebAPI.Areas.Admin.Controllers
         [NonAction]
         public async Task CreateContract(ContractViewModel model, Guid rentwarehouse)
         {
-            var order = await _context.Order.Include(x => x.WarehouseDetail).ThenInclude(x => x.Warehouse).FirstOrDefaultAsync(x => x.IsDeleted == false && x.PaymentStatus == PaymentStatus.Success && x.Id == model.OrderId && x.OrderStatus == Domain.Enums.OrderStatus.Processing);
+            var order = await _context.Order.Include(x => x.WarehouseDetail).ThenInclude(x => x.Warehouse).AsNoTracking().FirstOrDefaultAsync(x => x.IsDeleted == false && x.PaymentStatus == PaymentStatus.Success && x.Id == model.OrderId && x.OrderStatus == Domain.Enums.OrderStatus.Processing);
             if (order == null)
             {
                 throw new Exception("Không tìm thấy đơn hàng bạn yêu cầu!");
@@ -155,6 +155,9 @@ namespace WebAPI.Areas.Admin.Controllers
             contract.ContractStatus = ContractStatus.Pending;
 
             await _context.Contract.AddAsync(contract);
+
+            order.OrderStatus = OrderStatus.Complete;
+            _context.Order.Update(order);
             await _context.SaveChangesAsync();
 
         }

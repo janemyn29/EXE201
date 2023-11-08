@@ -37,6 +37,7 @@ namespace Infrastructures
         public DbSet<GoodImage> GoodImage { get; set; }
         public DbSet<Request> Request { get; set; }
         public DbSet<RequestDetail> RequestDetail { get; set; }
+        public DbSet<Feedback> Feedback { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
