@@ -85,6 +85,7 @@ namespace WebAPI.Controllers
                 if (momo.resultCode == 0)
                 {
                     order.PaymentStatus = Domain.Enums.PaymentStatus.Success;
+                    //order.OrderStatus = Domain.Enums.OrderStatus.Processing;
                 }
                 else
                 {
@@ -92,7 +93,7 @@ namespace WebAPI.Controllers
                     var warehouse = await _unit.WarehouseDetailRepository.GetByIdAsync(order.WarehouseDetailId);
                     warehouse.Quantity++;
                     _unit.WarehouseDetailRepository.Update(warehouse);
-                    order.OrderStatus = Domain.Enums.OrderStatus.Processing;
+                    order.OrderStatus = Domain.Enums.OrderStatus.Cancelled;
                 }
                 _unit.OrderRepository.Update(order);
                 await _unit.SaveChangeAsync();

@@ -98,7 +98,7 @@ namespace WebAPI.Areas.Admin.Controllers
             var order = await _context.Order.AsNoTracking().FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == orderId && x.OrderStatus == Domain.Enums.OrderStatus.Processing && x.PaymentStatus == PaymentStatus.Success);
             if (order == null)
             {
-                throw new Exception("Không tìm thấy đơn hàng bạn yêu cầu!");
+                throw new Exception("Không tìm thấy đơn hàng bạn yêu cầu hoặc đơn hàng chưa được hoàn thành việc thanh toán!");
             }
             if (order.DeleteBy == null)
             {
