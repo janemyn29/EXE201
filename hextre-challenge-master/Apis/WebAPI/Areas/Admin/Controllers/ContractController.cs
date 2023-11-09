@@ -95,7 +95,7 @@ namespace WebAPI.Areas.Admin.Controllers
         [NonAction]
         public async Task<Guid> CreateRenthouse(Guid orderId)
         {
-            var order = await _context.Order.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == orderId && x.OrderStatus == Domain.Enums.OrderStatus.Processing && x.PaymentStatus == PaymentStatus.Success);
+            var order = await _context.Order.AsNoTracking().FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == orderId && x.OrderStatus == Domain.Enums.OrderStatus.Processing && x.PaymentStatus == PaymentStatus.Success);
             if (order == null)
             {
                 throw new Exception("Không tìm thấy đơn hàng bạn yêu cầu!");
@@ -155,7 +155,7 @@ namespace WebAPI.Areas.Admin.Controllers
             contract.ContractStatus = ContractStatus.Pending;
 
             await _context.Contract.AddAsync(contract);
-
+            await _context.SaveChangesAsync();
             order.OrderStatus = OrderStatus.Complete;
             _context.Order.Update(order);
             await _context.SaveChangesAsync();
