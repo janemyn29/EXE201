@@ -68,6 +68,14 @@ namespace Application.Services
 
             return mapper;
         }
-    
+
+        public async Task<HashtagViewModel> GetById(Guid id)
+        {
+            var hashtag = await _unitOfWork.HashtagRepository.GetByIdAsync(id);
+
+            var mapper = _mapper.Map<HashtagViewModel>(hashtag);
+
+            return mapper;
+        }
     }
 }
