@@ -11,6 +11,7 @@ namespace Application.ViewModels.ContractViewModels
 {
     public class ContractModel
     {
+        public Guid Id { get; set; }
         public string CustomerId { get; set; }
         public Guid RentWarehouseId { get; set; }
         public string StaffId { get; set; }
