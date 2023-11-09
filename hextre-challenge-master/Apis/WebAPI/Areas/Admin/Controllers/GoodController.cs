@@ -72,7 +72,7 @@ namespace WebAPI.Areas.Admin.Controllers
                 await _context.GoodImage.AddRangeAsync(images);
                 await _context.SaveChangesAsync();
                 await myTransaction.CommitAsync();
-                return Ok(result);
+                return Ok("Tạo hàng trong kho thành công!");
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace WebAPI.Areas.Admin.Controllers
                 result.Id= id;
                  _context.Good.Update(result);
                 await _context.SaveChangesAsync();
-                return Ok(result);
+                return Ok("Cập nhật hàng trong kho thành công!");
             }
             catch (Exception ex)
             {
