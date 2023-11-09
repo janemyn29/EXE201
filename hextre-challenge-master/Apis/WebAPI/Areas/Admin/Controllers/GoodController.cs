@@ -52,7 +52,7 @@ namespace WebAPI.Areas.Admin.Controllers
                 var result = _mapper.Map<Good>(model.GoodCreateModel);
                 result.GoodCategoryId = Guid.Parse("3963bb64-cd45-4300-9554-4555d55e5054");
                 result.ExpirationDate =DateTime.Now;
-                var check = _context.Good.FirstOrDefaultAsync(x => x.RentWarehouseId == model.GoodCreateModel.RentWarehouseId && x.IsDeleted ==false && x.GoodName.ToLower().Equals(model.GoodCreateModel.GoodName.ToLower()));
+                var check = await _context.Good.FirstOrDefaultAsync(x => x.RentWarehouseId == model.GoodCreateModel.RentWarehouseId && x.IsDeleted ==false && x.GoodName.ToLower().Equals(model.GoodCreateModel.GoodName.ToLower()));
                 if (check != null)
                 {
                     return BadRequest("Tên hàng này đã tồn tại!");
