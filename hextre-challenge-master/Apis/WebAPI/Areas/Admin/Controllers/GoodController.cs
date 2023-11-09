@@ -93,7 +93,7 @@ namespace WebAPI.Areas.Admin.Controllers
                 {
                     return NotFound("Không tìm thấy hàng bạn yêu cầu!");
                 }
-                var check = _context.Good.FirstOrDefaultAsync(x => x.RentWarehouseId == model.RentWarehouseId && x.GoodName.ToLower().Equals(model.GoodName.ToLower()) && x.IsDeleted == false && x.Id != id);
+                var check = await _context.Good.FirstOrDefaultAsync(x => x.RentWarehouseId == model.RentWarehouseId && x.GoodName.ToLower().Equals(model.GoodName.ToLower()) && x.IsDeleted == false && x.Id != id);
                 if (check != null)
                 {
                     return BadRequest("Tên hàng này đã tồn tại!");
