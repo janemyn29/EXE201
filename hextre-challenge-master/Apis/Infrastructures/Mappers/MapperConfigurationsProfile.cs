@@ -76,6 +76,7 @@ namespace Infrastructures.Mappers
 
             CreateMap<ApplicationUser, UpdateAuthViewModel>().ReverseMap();
             CreateMap<GoodViewModel, Good>().ReverseMap();
+            CreateMap<GoodCreateModel, Good>().ReverseMap();
             CreateMap<RequestModel, Request>().ReverseMap();
             CreateMap<CreateRequestViewModel, Request>().ReverseMap();
             CreateMap<UpdateRequestViewModel, Request>().ReverseMap();
