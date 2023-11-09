@@ -154,7 +154,7 @@ namespace WebAPI.Areas.Admin.Controllers
             if (order == null)
             {
                 return NotFound("Không tìm thấy đơn hàng mà bạn yêu cầu!");
-            }else if (model.PickupDay < DateTime.Now)
+            }else if (model.PickupDay != null && model.PickupDay < DateTime.Now)
             {
 
                 return NotFound("Ngày vận chuyển không thể nhỏ hơn ngày hiện tại!");
