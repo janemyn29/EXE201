@@ -14,5 +14,7 @@ namespace Application.Interfaces
         Task<bool> CreateHashtag(CreateHashtagViewModel createHashtagView);
         Task<bool> UpdateHashtag(UpdateHashtagViewModel updateHashtagView);
         Task<bool> DeleteHashtag(Guid id);
+
+        Task<HashtagViewModel> GetById(Guid id);
     }
 }
