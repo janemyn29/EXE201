@@ -30,6 +30,7 @@ namespace WebAPI.Areas.Admin.Controllers
             _userManager = userManager;
             _requestDetailService = requestDetailService;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetRequestDetails()
         {
