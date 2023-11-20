@@ -15,8 +15,8 @@ namespace WebAPI.Validations.Warehouses
             RuleFor(x => x.CategoryId).NotEmpty().WithMessage("Id danh mục không được để trống.")
                 .Must(IsExistCategory).WithMessage("Danh mục này không tồn tại");
             RuleFor(x => x.Name).NotEmpty().WithMessage("Tên không được để trống.")
-                .MaximumLength(50)
-                .WithMessage("Tên không quá 50 ký tự.");
+                .MaximumLength(200)
+                .WithMessage("Tên không quá 200 ký tự.");
             RuleFor(x => x.Address).NotEmpty().WithMessage("Địa chỉ không được để trống.")
                 .MaximumLength(100)
                 .WithMessage("Địa chỉ không quá 100 ký tự.");

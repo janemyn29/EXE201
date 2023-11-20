@@ -54,8 +54,9 @@ namespace Application.Services
             order.OrderStatus = OrderStatus.Pending;
             order.WarehousePrice = warehouseDetail.WarehousePrice;
             order.ServicePrice = warehouseDetail.ServicePrice;
-            order.TotalPrice = warehouseDetail.WarehousePrice + warehouseDetail.ServicePrice;
-            order.Deposit = warehouseDetail.WarehousePrice;
+            order.Deposit = warehouseDetail.WarehousePrice + warehouseDetail.ServicePrice;
+            order.TotalPrice = order.Deposit *2;
+            
             order.Width = warehouseDetail.Width;
             order.Height = warehouseDetail.Height;
             order.Depth = warehouseDetail.Depth;

@@ -8,9 +8,6 @@ namespace Domain.Enums
 {
     public enum UnitType
     {
-        Inch = 1,
-        Foot = 2,
-        Centimeter = 3,
-        Meter = 4,
+        m = 1
     }
 }

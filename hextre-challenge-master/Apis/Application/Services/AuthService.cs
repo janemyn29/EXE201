@@ -45,7 +45,7 @@ namespace Application.Services
             var user = await _userManager.FindByNameAsync(email);
             if (user == null)
             {
-                user = await _userManager.FindByEmailAsync(pass);
+                user = await _userManager.FindByEmailAsync(email);
                 if (user == null)
                 {
                     throw new KeyNotFoundException($"Không tìm thấy tên đăng nhập hoặc địa chỉ email '{email}'");
