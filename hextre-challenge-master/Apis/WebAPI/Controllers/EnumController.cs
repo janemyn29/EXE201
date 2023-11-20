@@ -68,5 +68,12 @@ namespace WebAPI.Controllers
             List<EnumModel> enums = ((UnitType[])Enum.GetValues(typeof(UnitType))).Select(c => new EnumModel() { Value = (int)c, Display = c.ToString() }).ToList();
             return Ok(enums);
         }
+
+        [HttpGet("Requeststatus")]
+        public async Task<IActionResult> Requeststatus()
+        {
+            List<EnumModel> enums = ((RequestStatus[])Enum.GetValues(typeof(RequestStatus))).Select(c => new EnumModel() { Value = (int)c, Display = c.ToString() }).ToList();
+            return Ok(enums);
+        }
     }
 }

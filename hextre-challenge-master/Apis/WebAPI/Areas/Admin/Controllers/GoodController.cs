@@ -38,6 +38,24 @@ namespace WebAPI.Areas.Admin.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var listGood = await _context.Good.Where(x => x.IsDeleted == false).Include(x => x.GoodImages).ToListAsync();
+            if (listGood.Count > 0)
+            {
+                foreach (var item in listGood)
+                {
+                    foreach (var item1 in item.GoodImages)
+                    {
+                        item1.Good = null;
+                    }
+                }
+            }
+            var result = _mapper.Map<List<GoodViewModel>>(listGood);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post( [FromBody] GoodCreateWithImage model)
         {

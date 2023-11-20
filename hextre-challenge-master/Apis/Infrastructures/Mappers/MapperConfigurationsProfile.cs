@@ -78,6 +78,9 @@ namespace Infrastructures.Mappers
             CreateMap<GoodViewModel, Good>().ReverseMap();
             CreateMap<GoodCreateModel, Good>().ReverseMap();
             CreateMap<RequestModel, Request>().ReverseMap();
+            CreateMap<Request, RequestModel>()
+                .ForMember(des => des.StaffName, src => src.MapFrom(x => x.Customer.Fullname))
+                .ForMember(des => des.CustomerName, src => src.MapFrom(x => x.Customer.Fullname)).ReverseMap();
             CreateMap<CreateRequestViewModel, Request>().ReverseMap();
             CreateMap<UpdateRequestViewModel, Request>().ReverseMap();
             CreateMap<RequestDetail, RequestDetailViewModel>().ReverseMap();

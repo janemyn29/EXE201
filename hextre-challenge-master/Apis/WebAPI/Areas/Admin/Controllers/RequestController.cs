@@ -4,6 +4,7 @@ using Application.ViewModels.PostViewModels;
 using Application.ViewModels.RequestViewModels;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -31,28 +32,15 @@ namespace WebAPI.Areas.Admin.Controllers
             _userManager = userManager;
             _requestService = requestService;
         }
+
         [HttpGet]
-        public async Task<IActionResult> Get(Guid rentWarehouse)
+        public async Task<IActionResult> Get()
         {
-            var list = await _context.Request.Include(x=>x.Details).ThenInclude(x=>x.Good).ThenInclude(x=>x.RentWarehouse)
-                .Where(x=>x.IsDeleted == false && x.Details.FirstOrDefault().Good.RentWarehouseId == rentWarehouse).ToListAsync();
-            var warehouse = await _context.RentWarehouse.FirstOrDefaultAsync(x=>x.IsDeleted == false && x.Id == rentWarehouse);
-            var staff = await _userManager.FindByIdAsync(warehouse.StaffId);
+            var list = await _context.Request.Include(x => x.Details).Include(x => x.Customer).ToListAsync();
             var result = _mapper.Map<List<RequestModel>>(list);
-            foreach (var item in result)
-            {
-                foreach (var item1 in item.Details)
-                {
-                    item1.Request = null;
-                    item1.Good.RentWarehouse = null;
-                }
-                item.RentWarehouseInfor = warehouse.Information;
-                item.StaffPhone = staff.PhoneNumber;
-                item.StaffEmail = staff.Email;
-                item.StaffName = staff.Fullname;
-            }
             return Ok(result);
         }
+
 
         [HttpPost]
         [Authorize(Roles = "Admin,Staff")]
