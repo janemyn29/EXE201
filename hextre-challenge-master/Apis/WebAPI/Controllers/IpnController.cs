@@ -7,6 +7,8 @@ using Domain.Entities;
 using Infrastructures;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI.Controllers
 {
@@ -97,6 +99,69 @@ namespace WebAPI.Controllers
                 }
                 _unit.OrderRepository.Update(order);
                 await _unit.SaveChangeAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        
+        [HttpPost("IpnServiceHandler")]
+        public async Task<IActionResult> IpnServiceHandler([FromBody] MomoRedirect momo)
+        {
+            var tempPayType = momo.payType;
+            if (momo.payType == null)
+            {
+                tempPayType = "none";
+            }
+
+            string partnerCode = _configuration["MomoServices:partnerCode"];
+            string redirectUrl = _configuration["MomoServices:serviceUrl"];
+            string ipnUrl = _configuration["MomoServices:ipnServiceUrl"];
+            try
+            {
+                Transaction deposit = new Transaction();
+                deposit.PaymentId = Guid.Parse(momo.orderId);
+
+                deposit.Amount = momo.amount;
+                deposit.IpnURL = ipnUrl;
+                deposit.Info = momo.orderInfo;
+                deposit.PartnerCode = partnerCode;
+                deposit.RedirectUrl = redirectUrl;
+                deposit.RequestId = momo.requestId;
+                deposit.RequestType = "captureWallet";
+                if (momo.resultCode == 0)
+                {
+                    deposit.Status = Domain.Enums.DepositStatus.Success;
+                }
+                else
+                {
+                    deposit.Status = Domain.Enums.DepositStatus.Failed;
+                }
+
+                deposit.PaymentMethod = "Momo";
+                deposit.orderIdFormMomo = momo.orderId;
+                deposit.orderType = momo.orderType;
+                deposit.transId = momo.transId;
+                deposit.resultCode = momo.resultCode;
+                deposit.message = momo.message;
+                deposit.payType = tempPayType;
+                deposit.responseTime = momo.responseTime;
+                deposit.extraData = momo.extraData;
+                deposit.signature = momo.signature;
+                await _unit.TransactionRepository.AddAsync(deposit);
+                await _unit.SaveChangeAsync();
+
+                var order = await _context.ServicePayment.AsNoTracking().Where(x => x.Id == Guid.Parse(momo.orderId)).FirstOrDefaultAsync();
+                if (momo.resultCode == 0)
+                {
+                    order.IsPaid = true;
+                  
+                }
+                _context.ServicePayment.Update(order);
+                await _context.SaveChangesAsync();
                 return Ok();
             }
             catch (Exception ex)

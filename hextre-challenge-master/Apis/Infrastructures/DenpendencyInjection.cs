@@ -48,6 +48,8 @@ namespace Infrastructures
             services.AddScoped<IRequestDetailRepository, RequestDetailRepository>();
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<ITempRepository, TempRepository>();
+            
 
             // ATTENTION: if you do migration please check file README.md
             /*if (configuration.GetValue<bool>("UseInMemoryDatabase"))

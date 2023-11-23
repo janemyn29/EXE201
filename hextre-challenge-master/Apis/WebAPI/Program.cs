@@ -7,11 +7,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Hangfire;
+using HangfireBasicAuthenticationFilter;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //builder.Environment.EnvironmentName = "Staging"; //for branch develop
-builder.Environment.EnvironmentName = "Production"; //for branch domain 
+//builder.Environment.EnvironmentName = "Production"; //for branch domain 
 builder.Configuration
     .AddJsonFile("appsettings.json", false, true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", false, true)
@@ -136,6 +138,17 @@ app.UseHttpsRedirection();
 // todo authentication
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    DashboardTitle = "Warehouse Bridge Dashboard",
+    Authorization = new[] {
+    new HangfireCustomBasicAuthenticationFilter()
+    {
+        Pass = "Admin@123",
+        User= "Admin@localhost"
+    }
+    }
+});
 
 app.MapControllers();
 

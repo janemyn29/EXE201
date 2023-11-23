@@ -28,6 +28,7 @@ namespace Application.ViewModels.OrderViewModels
         public string UnitType { get; set; }
         public string PaymentStatus { get; set; }
         public DateTime? DeletionDate { get; set; }
+        public DateTime CreationDate { get; set; }
 
         public Guid? DeleteBy { get; set; }
 

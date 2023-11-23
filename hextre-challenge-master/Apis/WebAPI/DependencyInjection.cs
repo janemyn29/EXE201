@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using FluentValidation.AspNetCore;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System.Diagnostics;
@@ -20,6 +21,7 @@ namespace WebAPI
             services.AddSingleton<PerformanceMiddleware>();
             services.AddSingleton<Stopwatch>();
             services.AddScoped<IClaimsService, ClaimsService>();
+            services.AddScoped<MonthService>();
             services.AddHttpContextAccessor();
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
@@ -49,6 +51,22 @@ namespace WebAPI
                 }
             });
             });
+
+
+            var connectHangfire =
+        services.AddHangfire(configuration => configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage("Data Source=sql.bsite.net\\MSSQL2016;Initial Catalog=hangfireware_;User ID=hangfireware_;Password=Tramy@123;Trust Server Certificate=true; MultipleActiveResultSets=true", new Hangfire.SqlServer.SqlServerStorageOptions
+        {
+            //Data Source=sql.bsite.net\\MSSQL2016;Initial Catalog=tramysy_;User ID=tramysy_;Password=12345;Trust Server Certificate=true; MultipleActiveResultSets=true
+            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+            QueuePollInterval = TimeSpan.Zero,
+            UseRecommendedIsolationLevel = true,
+            DisableGlobalLocks = true,
+        }));
 
             return services;
         }

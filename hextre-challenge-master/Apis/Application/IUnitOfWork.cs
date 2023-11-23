@@ -22,6 +22,7 @@ namespace Application
 
         public IRequestRepository RequestRepository { get; }
         public IRequestDetailRepository RequestDetailRepository { get; }
+        public ITempRepository TransactionRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }

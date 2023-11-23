@@ -1,4 +1,5 @@
 ﻿using Application;
+using Application.Interfaces;
 using Application.Repositories;
 using Application.ViewModels.ImageWarehouseViewModels;
 using Application.ViewModels.WarehouseViewModel;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructures.Repositories
 {
-    public class TransactionRepository: ITransactionRepository
+    public class TransactionRepository : ITransactionRepository
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
@@ -22,6 +23,7 @@ namespace Infrastructures.Repositories
         {
             _context = context;
             _mapper = mapper;
+
         }
 
         public async Task CreateWarehouseWithImage(WarehourseCreateModel warehouse, IList<ImageWarehouseCreateModel> listImages)

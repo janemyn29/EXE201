@@ -40,6 +40,10 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Get(Guid warehouseId)
         {
             var list = await _dbContext.Feedback.Include(x => x.ApplicationUser).Where(x => x.IsDeleted == false && x.WarehouseId == warehouseId).OrderByDescending(x => x.CreationDate).ToListAsync();
+            foreach (var item in list)
+            {
+                item.ApplicationUser.Feedbacks = null;
+            }
             return Ok(list);
         }
 

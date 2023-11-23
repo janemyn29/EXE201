@@ -38,6 +38,8 @@ namespace Infrastructures
         public DbSet<Request> Request { get; set; }
         public DbSet<RequestDetail> RequestDetail { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
+        public DbSet<ServicePayment> ServicePayment { get; set; }
+        public DbSet<Transaction> Transaction { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

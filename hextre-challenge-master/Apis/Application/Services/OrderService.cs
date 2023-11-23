@@ -78,7 +78,7 @@ namespace Application.Services
             string redirectUrl = _configuration["MomoServices:redirectUrl"];
             string ipnUrl = _configuration["MomoServices:ipnUrl"];
             string requestType = "captureWallet";
-            string amount = order.Deposit.ToString();
+            string amount = order.TotalPrice.ToString();
             string orderId = order.Id.ToString();
             string requestId = Guid.NewGuid().ToString();
             string extraData = "Thanh toán đơn hàng tại WarehouseBridge.";

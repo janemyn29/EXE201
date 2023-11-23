@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin,Staff")]
+    //[Authorize(Roles = "Admin,Staff")]
     [Route("Admin/api/[controller]")]
     [ApiController]
     public class ContractController : ControllerBase
