@@ -35,6 +35,7 @@ namespace Application.Services
 
         public async Task<bool> CreateRequest(CreateRequestViewModel createRequestViewModel)
         {
+            createRequestViewModel.CompleteDate = DateTime.Now;
             var mapper = _mapper.Map<Request>(createRequestViewModel);
 
             await _unitOfWork.RequestRepository.AddAsync(mapper);
@@ -44,6 +45,7 @@ namespace Application.Services
 
         public async Task<bool> UpdateRequest(UpdateRequestViewModel updateRequestViewModel)
         {
+            updateRequestViewModel.CompleteDate = DateTime.Now;
             var mapper = _mapper.Map<Request>(updateRequestViewModel);
 
             _unitOfWork.RequestRepository.Update(mapper);
