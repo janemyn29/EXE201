@@ -36,14 +36,13 @@ namespace WebAPI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var list = await _context.Request.Include(x => x.Details).Include(x => x.Customer).ToListAsync();
+            var list = await _context.Request.Include(x => x.Details).Include(x => x.Customer).Where(x => x.IsDeleted == false).ToListAsync();
             var result = _mapper.Map<List<RequestModel>>(list);
             return Ok(result);
         }
 
 
         [HttpPost]
-        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> CreateRequest(CreateRequestViewModel createRequestViewModel)
         {
             try
@@ -61,7 +60,6 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> UpdateRequest(UpdateRequestViewModel updateRequestViewModel)
         {
             try
@@ -79,7 +77,6 @@ namespace WebAPI.Areas.Admin.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> DeleteRequest(Guid id)
         {
             try
