@@ -1,9 +1,11 @@
 ﻿using Application.Interfaces;
 using Application.ViewModels.PostCategoryViewModels;
 using Application.ViewModels.PostViewModels;
+using Application.ViewModels.RequestDetailViewModel;
 using Application.ViewModels.RequestViewModels;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,12 +37,38 @@ namespace Application.Services
 
         public async Task<bool> CreateRequest(CreateRequestViewModel createRequestViewModel)
         {
-            createRequestViewModel.CompleteDate = DateTime.Now;
-            var mapper = _mapper.Map<Request>(createRequestViewModel);
+            try
+            {
+                createRequestViewModel.RequestId = Guid.NewGuid();
+                createRequestViewModel.StaffId = createRequestViewModel.StaffId;
+                createRequestViewModel.CustomerId = createRequestViewModel.CustomerId;
+                createRequestViewModel.CompleteDate = DateTime.Now;
+                createRequestViewModel.DenyReason = createRequestViewModel.DenyReason;
+                createRequestViewModel.RequestStatus = createRequestViewModel.RequestStatus;
+                createRequestViewModel.RequestType = createRequestViewModel.RequestType;
+                if (createRequestViewModel.RequestDetails == null)
+                {
+                    createRequestViewModel.RequestDetails = new List<CreateRequestDetailViewModel>();
+                }
 
-            await _unitOfWork.RequestRepository.AddAsync(mapper);
+                foreach (var requestDetail in createRequestViewModel.RequestDetails)
+                {
+                    requestDetail.RequestId = createRequestViewModel.RequestId;
+                    requestDetail.GoodId = requestDetail.GoodId;
+                    requestDetail.Quantity = requestDetail.Quantity;
+                }
 
-            return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Tạo yêu cầu thất bại.");
+                var newOrder = _mapper.Map<Request>(createRequestViewModel);
+
+                await _unitOfWork.RequestRepository.AddAsync(newOrder);
+
+                return await _unitOfWork.SaveChangeAsync() > 0 ? true : throw new Exception("Tạo yêu cầu thất bại.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
 
         public async Task<bool> UpdateRequest(UpdateRequestViewModel updateRequestViewModel)
