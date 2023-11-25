@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace WebAPI.Areas.Admin.Controllers
@@ -35,6 +36,13 @@ namespace WebAPI.Areas.Admin.Controllers
         public async Task<IActionResult> GetRequestDetails()
         {
             var result = await _requestDetailService.GetRequestDetails();
+            return Ok(result);
+        }
+
+        [HttpGet("RequestId")]
+        public async Task<IActionResult> GetRequestDetailsByRequestId(Guid id)
+        {
+            var result = await _context.RequestDetail.Where(x => x.IsDeleted == false && x.RequestId == id).Include(x => x.Good).ToListAsync();
             return Ok(result);
         }
 
