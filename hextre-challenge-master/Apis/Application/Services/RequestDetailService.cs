@@ -66,6 +66,9 @@ namespace Application.Services
             }
         }
 
-        
+        public Task<List<RequestDetailViewModel>> GetRequestDetailsByRequestId(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

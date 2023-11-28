@@ -1,4 +1,5 @@
-﻿using Application.ViewModels.RequestDetailViewModel;
+﻿using Application.ViewModels.ChemicalsViewModels;
+using Application.ViewModels.RequestDetailViewModel;
 using Application.ViewModels.RequestViewModels;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,7 @@ namespace Application.Interfaces
         Task<bool> CreateRequestDetails(CreateRequestDetailViewModel createRequestDetailsViewModel);
         Task<bool> UpdateRequestDetails(UpdateRequestDetailViewModel updateRequestDetailsViewModel);
         Task<bool> DeleteRequestDetail(Guid id);
+
+        Task<List<RequestDetailViewModel>> GetRequestDetailsByRequestId(Guid id);
     }
 }
