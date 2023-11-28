@@ -27,7 +27,12 @@ namespace WebAPI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            var orders = await _context.DepositPayments.AsNoTracking().Where(x => x.IsDeleted == false).ToListAsync();
+            var orders = await _context.DepositPayments.Include(x=>x.Order).ThenInclude(x=>x.Customer).AsNoTracking().Where(x => x.IsDeleted == false).ToListAsync();
+            foreach (var item in orders)
+            {
+                item.Order.DepositPayments = null;
+                item.Order.Customer.OrderDetail = null;
+            }
             return Ok(orders);
         }
     }

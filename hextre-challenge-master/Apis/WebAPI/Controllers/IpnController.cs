@@ -80,6 +80,7 @@ namespace WebAPI.Controllers
                 deposit.responseTime = momo.responseTime;
                 deposit.extraData = momo.extraData;
                 deposit.signature = momo.signature;
+                deposit.CreationDate = DateTime.Now;
                 await _unit.DepositRepository.AddAsync(deposit);
                 await _unit.SaveChangeAsync();
 
@@ -87,11 +88,18 @@ namespace WebAPI.Controllers
                 if (momo.resultCode == 0)
                 {
                     order.PaymentStatus = Domain.Enums.PaymentStatus.Success;
-                    //order.OrderStatus = Domain.Enums.OrderStatus.Processing;
                 }
                 else
                 {
                     order.PaymentStatus = Domain.Enums.PaymentStatus.Fail;
+                    order.CancelReason = "Khách hàng không tiến hành thanh toán!";
+
+                    var note = new Notification();
+                    note.ApplicationUserId = order.CustomerId;
+                    note.IsRead = false;
+                    note.Title = "Thanh toán thành công";
+                    note.Description = "Bạn vừa thanh toán đơn hàng thành công! Warehouse Bridge sẽ sớm liên hệ với bạn để tiến hành lên lịch nhận gửi hàng. Cảm ơn bạn đã luôn tin tưởng Warehouse Bridge!";
+                    await _unit.NoteRepository.AddAsync(note);
                     var warehouse = await _unit.WarehouseDetailRepository.GetByIdAsync(order.WarehouseDetailId);
                     warehouse.Quantity++;
                     _unit.WarehouseDetailRepository.Update(warehouse);
@@ -151,14 +159,21 @@ namespace WebAPI.Controllers
                 deposit.responseTime = momo.responseTime;
                 deposit.extraData = momo.extraData;
                 deposit.signature = momo.signature;
+                deposit.CreationDate = DateTime.Now;
                 await _unit.TransactionRepository.AddAsync(deposit);
                 await _unit.SaveChangeAsync();
 
-                var order = await _context.ServicePayment.AsNoTracking().Where(x => x.Id == Guid.Parse(momo.orderId)).FirstOrDefaultAsync();
+                var order = await _context.ServicePayment.Include(x=>x.Contract).AsNoTracking().Where(x => x.Id == Guid.Parse(momo.orderId)).FirstOrDefaultAsync();
                 if (momo.resultCode == 0)
                 {
                     order.IsPaid = true;
-                  
+                    order.PaymentDate = DateTime.Now;
+                    var note = new Notification();
+                    note.ApplicationUserId = order.Contract.CustomerId;
+                    note.IsRead = false;
+                    note.Title = "Thanh toán hóa đơn hàng tháng thành công";
+                    note.Description = "Bạn vừa thanh toán hóa đơn hàng tháng thành công! Cảm ơn bạn đã luôn tin tưởng Warehouse Bridge!";
+                    await _unit.NoteRepository.AddAsync(note);
                 }
                 _context.ServicePayment.Update(order);
                 await _context.SaveChangesAsync();

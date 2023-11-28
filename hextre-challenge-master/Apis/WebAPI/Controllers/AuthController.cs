@@ -8,6 +8,7 @@ using FluentValidation;
 using Infrastructures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -47,6 +48,12 @@ namespace WebAPI.Controllers
             _configuration = configuration;
             _environment = environment;
             _mapper = mapper;
+        }
+
+        [HttpGet("GetTime")]
+        public IActionResult GetTime()
+        {
+            return Ok(DateTime.Now.ToString());
         }
         [HttpPost]
         [Route("/Login")]

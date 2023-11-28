@@ -19,7 +19,7 @@ namespace WebAPI.Areas.Admin.Controllers
 {
     [Route("Admin/api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Staff")]
+    //[Authorize(Roles = "Admin,Staff")]
     public class OrdersController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -39,10 +39,12 @@ namespace WebAPI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<ActionResult> GetOrder()
         {
-            var orders = await _context.Order.AsNoTracking().Include(x => x.Customer).Where(x => x.IsDeleted == false).ToListAsync();
+            var orders = await _context.Order.AsNoTracking().Include(x => x.Customer).Include(x=>x.WarehouseDetail).ThenInclude(x=>x.Warehouse).Where(x => x.IsDeleted == false).ToListAsync();
             foreach (var item in orders)
             {
                 item.Customer.OrderDetail = null;
+                item.WarehouseDetail.Orders = null;
+                item.WarehouseDetail.Warehouse.WarehouseDetails = null;
             }
             var result = _mapper.Map<IList<OrderViewModel>>(orders);
             return Ok(result);

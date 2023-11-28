@@ -106,7 +106,7 @@ namespace WebAPI.Areas.Admin.Controllers
             try
             {
                 var result = _mapper.Map<Good>(model);
-                var good = _context.Good.FirstOrDefaultAsync(x=>x.IsDeleted ==false && x.Id == id);
+                var good = await _context.Good.FirstOrDefaultAsync(x=>x.IsDeleted ==false && x.Id == id);
                 if (good == null)
                 {
                     return NotFound("Không tìm thấy hàng bạn yêu cầu!");

@@ -29,16 +29,34 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Get()
         {
             var userId = _claims.GetCurrentUserId;
-            var payments = await _context.ServicePayment.Include(x=>x.Contract).Where(x=>!x.IsDeleted && x.Contract.CustomerId.ToLower().Equals(userId)).ToListAsync();
+            var payments = await _context.ServicePayment.Include(x=>x.Contract).Where(x=>!x.IsDeleted).ToListAsync();
+            var temp = payments.Where(x=>x.Contract.CustomerId.ToLower().Equals(userId.ToString().ToLower())).ToList();
+
             foreach (var item in payments)
             {
                 item.Contract.ServicePayments = null;
             }
+            return Ok(temp);
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            var userId = _claims.GetCurrentUserId;
+            var payments = await _context.ServicePayment.Include(x => x.Contract).Where(x => !x.IsDeleted && x.Id ==id && x.Contract.CustomerId.ToLower().Equals(userId)).FirstOrDefaultAsync();
+            if( payments == null)
+            {
+                return BadRequest("Không tìm thấy hóa đơn hàng tháng mà bạn yêu cầu");
+            }
+            payments.Contract.ServicePayments = null;
+
+            
             return Ok(payments);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Payment(Guid servicePaymentId)
+        public async Task<IActionResult> Payment(Guid servicePaymentId,  string option = "payWithATM")
         {
             try
             {
@@ -48,7 +66,7 @@ namespace WebAPI.Controllers
                 {
                     return BadRequest("Không tìm thấy hóa đơn cần thanh toán hoặc bạn không có quyền truy cập vào hóa đơn bạn yêu cầu!");
                 }
-                var payment = _service.Payment(ser);
+                var payment = _service.Payment(ser, option);
                 return Ok(payment);
             }
             catch (Exception ex)
@@ -56,8 +74,5 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
-
     }
 }

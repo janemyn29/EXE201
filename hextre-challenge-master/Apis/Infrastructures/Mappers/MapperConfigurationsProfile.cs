@@ -16,6 +16,7 @@ using Application.ViewModels.AuthViewModel;
 using Application.ViewModels.GoodViewModels;
 using Application.ViewModels.RequestViewModels;
 using Application.ViewModels.RequestDetailViewModel;
+using Application.ViewModels.ServicePaymentModels;
 
 namespace Infrastructures.Mappers
 {
@@ -87,6 +88,7 @@ namespace Infrastructures.Mappers
             CreateMap<RequestDetail, RequestDetailViewModel>().ReverseMap();
             CreateMap<CreateRequestDetailViewModel, RequestDetail>().ReverseMap();
             CreateMap<UpdateRequestDetailViewModel, RequestDetail>().ReverseMap();
+            CreateMap<ServicePayment, ServiceModel>().ReverseMap();
 
         }
     }

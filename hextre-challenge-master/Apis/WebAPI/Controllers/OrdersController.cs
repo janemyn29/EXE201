@@ -11,12 +11,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Transactions;
 using WebAPI.Services;
 
 namespace WebAPI.Controllers
 {
-    [Authorize(Roles =("Customer"))]
+    //[Authorize(Roles =("Customer"))]
     [Route("api/[controller]")]
     [ApiController]
     public class OrdersController : ControllerBase
@@ -69,7 +70,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostOrder(Guid warehouseDetailId)
+        public async Task<ActionResult> PostOrder(Guid warehouseDetailId, string option = "payWithATM")
         {
             try
             {
@@ -88,7 +89,7 @@ namespace WebAPI.Controllers
                 _unit.WarehouseDetailRepository.Update(warehouseDetail);
                 await _unit.SaveChangeAsync();
                 var order = await _unit.OrderRepository.GetByIdAsync(orderId);
-                string returnUrl = await _orderService.Payment(order);
+                string returnUrl = await _orderService.Payment(order, option);
                 return Ok(returnUrl);
             }
             catch (Exception ex)
@@ -98,7 +99,21 @@ namespace WebAPI.Controllers
         }
 
 
-       
+
+        [HttpGet("VNPAY")]
+        public async Task<ActionResult> VNPAY()
+        {
+            string ip = Response.HttpContext.Connection.RemoteIpAddress.ToString();
+            if(ip == "::1")
+            {
+                ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
+            }
+            string returnUrl = await _orderService.PaymentVNPAY("192.168.1.7");
+            return Ok(returnUrl);
+        }
+
+
+
 
 
     }

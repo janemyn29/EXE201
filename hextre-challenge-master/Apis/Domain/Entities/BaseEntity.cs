@@ -4,7 +4,7 @@
     {
         public Guid Id { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public DateTime CreationDate { get; set; } = DateTime.Now;
 
         public Guid? CreatedBy { get; set; }
 

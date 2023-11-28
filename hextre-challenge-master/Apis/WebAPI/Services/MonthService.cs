@@ -68,7 +68,7 @@ namespace WebAPI.Services
         }
 
 
-        public async Task<string> Payment(ServicePayment ser)
+        public async Task<string> Payment(ServicePayment ser, string option)
         {
             string endpoint = _configuration["MomoServices:endpoint"];
             string partnerCode = _configuration["MomoServices:partnerCode"];
@@ -77,7 +77,7 @@ namespace WebAPI.Services
             string orderInfo = "Thanh toán hóa đơn tháng "+DateTime.Now.Month+" tại WarehouseBridge.";
             string redirectUrl = _configuration["MomoServices:serviceUrl"];
             string ipnUrl = _configuration["MomoServices:ipnServiceUrl"];
-            string requestType = "captureWallet";
+            string requestType = option;
             string amount = ser.TotalPrice.ToString();
             string orderId = ser.Id.ToString();
             string requestId = Guid.NewGuid().ToString();
