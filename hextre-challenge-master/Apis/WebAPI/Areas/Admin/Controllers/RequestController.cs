@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application;
+using Application.Interfaces;
 using Application.Services;
 using Application.ViewModels.PostViewModels;
 using Application.ViewModels.RequestViewModels;
@@ -69,6 +70,55 @@ namespace WebAPI.Areas.Admin.Controllers
                 {
                     Reuslt = "Cập nhật thành công."
                 });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("UpdateStatus")]
+        public async Task<IActionResult> UpdateStatus(Guid id, RequestStatus requestStatus, string? denyReason)
+        {
+            try
+            {
+               var req = await _context.Request.Where(x=>x.Id == id && !x.IsDeleted).AsNoTracking().FirstOrDefaultAsync();
+                if(req == null)
+                {
+                    return BadRequest("Không tìm thấy yêu cầu!");
+                }
+                else
+                {
+                    if(requestStatus == RequestStatus.Complete)
+                    {
+                        req.CompleteDate = DateTime.Now;
+                        req.RequestStatus = RequestStatus.Complete;
+                        var details = await _context.RequestDetail.AsNoTracking().Where(x => x.RequestId == req.Id && !x.IsDeleted).ToListAsync();
+                        foreach (var item in details)
+                        {
+                            var good = await _context.Good.AsNoTracking().FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == item.GoodId);
+                            if(req.RequestType == RequestType.PickUp)
+                            {
+                                good.Quantity = good.Quantity - item.Quantity;
+                            }
+                            else
+                            {
+                                good.Quantity = good.Quantity + item.Quantity;
+                            }
+                            
+                            _context.Good.Update(good);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    else if(requestStatus == RequestStatus.Canceled)
+                    {
+                        req.DenyReason = denyReason;
+                        req.RequestStatus = RequestStatus.Canceled;
+                    }
+                    _context.Request.Update(req);
+                    await _context.SaveChangesAsync();
+                    return Ok("Cập nhật trạng thái yêu cầu thành công!");
+                }
             }
             catch (Exception ex)
             {

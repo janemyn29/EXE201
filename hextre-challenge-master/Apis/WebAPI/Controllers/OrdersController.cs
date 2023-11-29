@@ -17,7 +17,7 @@ using WebAPI.Services;
 
 namespace WebAPI.Controllers
 {
-    //[Authorize(Roles =("Customer"))]
+    [Authorize(Roles =("Customer"))]
     [Route("api/[controller]")]
     [ApiController]
     public class OrdersController : ControllerBase
@@ -100,17 +100,7 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpGet("VNPAY")]
-        public async Task<ActionResult> VNPAY()
-        {
-            string ip = Response.HttpContext.Connection.RemoteIpAddress.ToString();
-            if(ip == "::1")
-            {
-                ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
-            }
-            string returnUrl = await _orderService.PaymentVNPAY("192.168.1.7");
-            return Ok(returnUrl);
-        }
+       
 
 
 

@@ -131,7 +131,7 @@ namespace WebAPI.Controllers
             try
             {
                 Transaction deposit = new Transaction();
-                deposit.PaymentId = Guid.Parse(momo.orderId);
+                deposit.PaymentId = Guid.Parse(momo.extraData);
 
                 deposit.Amount = momo.amount;
                 deposit.IpnURL = ipnUrl;
@@ -163,7 +163,7 @@ namespace WebAPI.Controllers
                 await _unit.TransactionRepository.AddAsync(deposit);
                 await _unit.SaveChangeAsync();
 
-                var order = await _context.ServicePayment.Include(x=>x.Contract).AsNoTracking().Where(x => x.Id == Guid.Parse(momo.orderId)).FirstOrDefaultAsync();
+                var order = await _context.ServicePayment.Include(x=>x.Contract).AsNoTracking().Where(x => x.Id == Guid.Parse(momo.extraData)).FirstOrDefaultAsync();
                 if (momo.resultCode == 0)
                 {
                     order.IsPaid = true;

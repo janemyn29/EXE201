@@ -1,5 +1,4 @@
 ﻿using Application;
-using Application.ViewModels.OrderViewModels;
 using AutoMapper;
 using Infrastructures;
 using Microsoft.AspNetCore.Authorization;
@@ -9,16 +8,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
+    [Authorize(Roles ="Admin")]
     [Route("Admin/api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Staff")]
-    public class DepositController : ControllerBase
+    public class TransactionController : ControllerBase
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unit;
 
-        public DepositController(AppDbContext context, IMapper mapper, IUnitOfWork unit)
+        public TransactionController(AppDbContext context, IMapper mapper, IUnitOfWork unit)
         {
             _context = context;
             _mapper = mapper;
@@ -27,11 +26,12 @@ namespace WebAPI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            var orders = await _context.DepositPayments.Include(x=>x.Order).ThenInclude(x=>x.Customer).AsNoTracking().Where(x => x.IsDeleted == false).OrderBy(x=>x.CreationDate).ToListAsync();
+            var orders = await _context.Transaction.Include(x=>x.ServicePayment).ThenInclude(x=>x.Contract.Customer).AsNoTracking().Where(x => x.IsDeleted == false).OrderBy(x => x.CreationDate).ToListAsync();
             foreach (var item in orders)
             {
-                item.Order.DepositPayments = null;
-                item.Order.Customer.OrderDetail = null;
+                item.ServicePayment = null;
+                item.ServicePayment.Contract.ServicePayments = null;
+                item.ServicePayment.Contract.Customer.Contracts = null;
             }
             return Ok(orders);
         }

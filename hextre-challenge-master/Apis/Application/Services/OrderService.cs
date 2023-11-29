@@ -140,63 +140,73 @@ namespace Application.Services
             }
         }
 
-        private static readonly ILog log =
-          LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        public async Task<string> PaymentVNPAY(/*Order temp*/ string ip)
+        public async Task<string> PaymentMonly(ServicePayment service, string option)
         {
-
-            /*
-              <add key="vnp_Url" value="https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"/>
-    <add key="vnp_Api" value="https://sandbox.vnpayment.vn/merchant_webapi/api/transaction"/>
-    <add key="vnp_TmnCode" value="S7SMHMU1"/>
-    <add key="vnp_HashSecret" value="TZXGTOSTHYQNHATPAFVEHWZVBBBZLXPZ"/>
-    <add key="vnp_Returnurl" value="http://localhost:16262/vnpay_return.aspx"/>*/
-            string vnp_Returnurl = "https://www.youtube.com/"; //URL nhan ket qua tra ve 
-            string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; //URL thanh toan cua VNPAY 
-            string vnp_TmnCode = "S7SMHMU1"; //Ma định danh merchant kết nối (Terminal Id)
-            string vnp_HashSecret = "TZXGTOSTHYQNHATPAFVEHWZVBBBZLXPZ"; //Secret Key
-
-
-            OrderInfo order = new OrderInfo();
-            order.OrderId = DateTime.Now.Ticks; // Giả lập mã giao dịch hệ thống merchant gửi sang VNPAY
-            order.Amount = 100000; // Giả lập số tiền thanh toán hệ thống merchant gửi sang VNPAY 100,000 VND
-            order.Status = "0"; //0: Trạng thái thanh toán "chờ thanh toán" hoặc "Pending" khởi tạo giao dịch chưa có IPN
-            order.CreatedDate = DateTime.Now;
+            string endpoint = _configuration["MomoServices:endpoint"];
+            string partnerCode = _configuration["MomoServices:partnerCode"];
+            string accessKey = _configuration["MomoServices:accessKey"];
+            string serectkey = _configuration["MomoServices:secretKey"];
+            string orderInfo = "Thanh toán hóa đơn hàng tháng tại WarehouseBridge.";
+            string redirectUrl = _configuration["MomoServices:redirectUrl"];
+            string ipnUrl = _configuration["MomoServices:ipnServiceUrl"];
+            string requestType = option;
+            string amount = service.TotalPrice.ToString();
+            string orderId = Guid.NewGuid().ToString();
+            string requestId = Guid.NewGuid().ToString();
+            string extraData = service.Id.ToString(); 
+            //captureWallet
 
 
-            VnPayLibrary vnpay = new VnPayLibrary();
+            //Before sign HMAC SHA256 signature
+            string rawHash = "accessKey=" + accessKey +
+                "&amount=" + amount +
+                "&extraData=" + extraData +
+                "&ipnUrl=" + ipnUrl +
+                "&orderId=" + orderId +
+                "&orderInfo=" + orderInfo +
+                "&partnerCode=" + partnerCode +
+                "&redirectUrl=" + redirectUrl +
+                "&requestId=" + requestId +
+                "&requestType=" + requestType
+            ;
 
-            vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
-            vnpay.AddRequestData("vnp_Command", "pay");
-            vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
-            vnpay.AddRequestData("vnp_Amount", (order.Amount * 100).ToString()); //Số tiền thanh toán. Số tiền không mang các ký tự phân tách thập phân, phần nghìn, ký tự tiền tệ. Để gửi số tiền thanh toán là 100,000 VND (một trăm nghìn VNĐ) thì merchant cần nhân thêm 100 lần (khử phần thập phân), sau đó gửi sang VNPAY là: 10000000
-
-            vnpay.AddRequestData("vnp_CreateDate", order.CreatedDate.ToString("yyyyMMddHHmmss"));
-            vnpay.AddRequestData("vnp_CurrCode", "VND");
-            vnpay.AddRequestData("vnp_IpAddr",ip);
-            vnpay.AddRequestData("vnp_Locale", "vn");
-            vnpay.AddRequestData("vnp_BankCode", "VNPAYQR");
-
-
-            vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + order.OrderId);
-            vnpay.AddRequestData("vnp_OrderType", "250000"); //default value: other
-
-            vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
-            vnpay.AddRequestData("vnp_IpnUrl", vnp_Returnurl);
-            vnpay.AddRequestData("vnp_TxnRef", order.OrderId.ToString()); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
-
-            //Add Params of 2.1.0 Version
-            //vnpay.AddRequestData("vnp_ExpireDate", DateTime.Now.AddMinutes(10).ToString("yyyyMMddHHmmss"));
-            //Billing
+            MoMoSecurity crypto = new MoMoSecurity();
+            //sign signature SHA256
+            string signature = crypto.signSHA256(rawHash, serectkey);
 
 
 
-            string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-            log.InfoFormat("VNPAY URL: {0}", paymentUrl);
-            return paymentUrl;
+            //build body json request
+            JObject message = new JObject
+                 {
+                { "partnerCode", partnerCode },
+                { "partnerName", "Test" },
+                { "storeId", "MomoTestStore1" },
+                { "requestId", requestId },
+                { "amount", amount },
+                { "orderId", orderId },
+                { "orderInfo", orderInfo },
+                { "redirectUrl", redirectUrl },
+                { "ipnUrl", ipnUrl },
+                { "lang", "en" },
+                { "extraData", extraData },
+                { "requestType", requestType },
+                { "signature", signature }
+
+                };
+            try
+            {
+                string responseFromMomo = PaymentRequest.sendPaymentRequest(endpoint, message.ToString());
+
+                JObject jmessage = JObject.Parse(responseFromMomo);
+
+                return jmessage.GetValue("payUrl").ToString();
+            }
+            catch
+            {
+                throw new Exception("Đã xảy ra lối trong qua trình thanh toán. Vui lòng thanh toán lại sau!");
+            }
         }
-
 
     }
 }

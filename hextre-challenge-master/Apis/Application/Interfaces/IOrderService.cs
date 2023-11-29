@@ -12,7 +12,7 @@ namespace Application.Interfaces
     {
         public Task<Guid> CreateOrder(OrderCreateModel model);
         public Task<string> Payment(Order order, string option);
-        public Task<string> PaymentVNPAY(/*Order temp*/ string ip);
+        public Task<string> PaymentMonly(ServicePayment service, string option);
 
         /*    "partnerCode": "MOMOBKUN20180529",
             "accessKey": "klm05TvNBzhg7h7j",

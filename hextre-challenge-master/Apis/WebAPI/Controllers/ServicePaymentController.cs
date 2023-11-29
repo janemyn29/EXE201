@@ -17,9 +17,9 @@ namespace WebAPI.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IClaimsService _claims;
-        private readonly MonthService _service;
+        private readonly IOrderService _service;
 
-        public ServicePaymentController(AppDbContext context, IClaimsService claims,MonthService service )
+        public ServicePaymentController(AppDbContext context, IClaimsService claims,IOrderService service )
         {
             _context = context;
             _claims = claims;
@@ -45,7 +45,8 @@ namespace WebAPI.Controllers
         {
             var userId = _claims.GetCurrentUserId;
             var payments = await _context.ServicePayment.Include(x => x.Contract).Where(x => !x.IsDeleted && x.Id ==id && x.Contract.CustomerId.ToLower().Equals(userId)).FirstOrDefaultAsync();
-            if( payments == null)
+            
+            if ( payments == null)
             {
                 return BadRequest("Không tìm thấy hóa đơn hàng tháng mà bạn yêu cầu");
             }
@@ -61,13 +62,19 @@ namespace WebAPI.Controllers
             try
             {
                 var userId = _claims.GetCurrentUserId;
-                var ser =  await _context.ServicePayment.Where(x => !x.IsDeleted && x.Contract.CustomerId.ToLower().Equals(userId) && !x.IsPaid && x.Id == servicePaymentId).FirstOrDefaultAsync();
+
+                var payments = await _context.ServicePayment.Include(x => x.Contract).Where(x => !x.IsDeleted).ToListAsync();
+                var temp = payments.Where(x => x.Contract.CustomerId.ToLower().Equals(userId.ToString().ToLower())).ToList();
+                var ser = temp.Where(x=>x.Id == servicePaymentId).FirstOrDefault();
                 if (ser == null)
                 {
-                    return BadRequest("Không tìm thấy hóa đơn cần thanh toán hoặc bạn không có quyền truy cập vào hóa đơn bạn yêu cầu!");
+                    return BadRequest("Không tìm thấy hóa đơn cần thanh toán");
+                }else if(ser.IsPaid)
+                {
+                    return BadRequest("Hóa đơn này đã được thanh toán");
                 }
-                var payment = _service.Payment(ser, option);
-                return Ok(payment);
+                var tempcheck = await _service.PaymentMonly(ser, option);
+                return Ok(tempcheck);
             }
             catch (Exception ex)
             {

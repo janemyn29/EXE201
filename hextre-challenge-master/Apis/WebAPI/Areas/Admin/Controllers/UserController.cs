@@ -64,12 +64,12 @@ namespace WebAPI.Areas.Admin.Controllers
             }
             try
             {
-                var emailUser = await _userManager.FindByEmailAsync(model.Email);
-                if (emailUser != null)
+                var emailUser = await _userManager.Users.Where(x=>x.Email.ToLower().Equals(model.Email.ToLower()) && !x.Id.ToLower().Equals(id.ToLower())).FirstOrDefaultAsync();
+                if (emailUser != null )
                 {
                     return BadRequest("Email này đã được sử dụng cho tài khoản khác");
                 }
-                var username = await _userManager.FindByNameAsync(model.Username);
+                var username = await _userManager.Users.Where(x => x.UserName.ToLower().Equals(model.Username.ToLower()) && !x.Id.ToLower().Equals(id.ToLower())).FirstOrDefaultAsync();
                 if (username != null)
                 {
                     return BadRequest("Tên đăng nhập này đã được sử dụng cho tài khoản khác");

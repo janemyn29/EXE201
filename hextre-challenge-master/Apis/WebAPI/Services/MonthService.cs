@@ -74,14 +74,14 @@ namespace WebAPI.Services
             string partnerCode = _configuration["MomoServices:partnerCode"];
             string accessKey = _configuration["MomoServices:accessKey"];
             string serectkey = _configuration["MomoServices:secretKey"];
-            string orderInfo = "Thanh toán hóa đơn tháng "+DateTime.Now.Month+" tại WarehouseBridge.";
+            string orderInfo = "Thanh toán hóa đơn tháng tại WarehouseBridge.";
             string redirectUrl = _configuration["MomoServices:serviceUrl"];
             string ipnUrl = _configuration["MomoServices:ipnServiceUrl"];
             string requestType = option;
             string amount = ser.TotalPrice.ToString();
             string orderId = ser.Id.ToString();
             string requestId = Guid.NewGuid().ToString();
-            string extraData = "Thanh toán hóa đơn tháng "+DateTime.Now.Month+" tại WarehouseBridge.";
+            string extraData = "Thanh toán hóa đơn tháng tại WarehouseBridge.";
 
 
             //Before sign HMAC SHA256 signature

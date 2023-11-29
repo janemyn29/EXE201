@@ -39,7 +39,7 @@ namespace WebAPI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<ActionResult> GetOrder()
         {
-            var orders = await _context.Order.AsNoTracking().Include(x => x.Customer).Include(x=>x.WarehouseDetail).ThenInclude(x=>x.Warehouse).Where(x => x.IsDeleted == false).ToListAsync();
+            var orders = await _context.Order.AsNoTracking().Include(x => x.Customer).Include(x=>x.WarehouseDetail).ThenInclude(x=>x.Warehouse).Where(x => x.IsDeleted == false).OrderBy(x => x.CreationDate).ToListAsync();
             foreach (var item in orders)
             {
                 item.Customer.OrderDetail = null;
@@ -53,7 +53,7 @@ namespace WebAPI.Areas.Admin.Controllers
         [HttpGet("Filter")]
         public async Task<ActionResult> OrderFilter(OrderStatus orderStatus)
         {
-            var orders = await _context.Order.AsNoTracking().Include(x=>x.Customer).Where(x => x.IsDeleted == false && x.OrderStatus == orderStatus).ToListAsync();
+            var orders = await _context.Order.AsNoTracking().Include(x=>x.Customer).Where(x => x.IsDeleted == false && x.OrderStatus == orderStatus).OrderByDescending(x => x.CreationDate).ToListAsync();
             foreach (var item in orders)
             {
                 item.Customer.OrderDetail = null;

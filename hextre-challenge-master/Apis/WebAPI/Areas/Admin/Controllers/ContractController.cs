@@ -95,7 +95,7 @@ namespace WebAPI.Areas.Admin.Controllers
         [NonAction]
         public async Task<Guid> CreateRenthouse(Guid orderId)
         {
-            var order = await _context.Order.AsNoTracking().FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == orderId && x.OrderStatus == Domain.Enums.OrderStatus.Processing && x.PaymentStatus == PaymentStatus.Success);
+            var order = await _context.Order.AsNoTracking().Include(x=>x.Customer).FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == orderId && x.OrderStatus == Domain.Enums.OrderStatus.Processing && x.PaymentStatus == PaymentStatus.Success);
             if (order == null)
             {
                 throw new Exception("Không tìm thấy đơn hàng bạn yêu cầu hoặc đơn hàng chưa được hoàn thành việc thanh toán!");
@@ -105,7 +105,7 @@ namespace WebAPI.Areas.Admin.Controllers
                 throw new Exception("Đơn hàng này chưa được giao cho nhân viên quản lý!");
             }
             var temp = await _context.RentWarehouse.Where(x => x.IsDeleted == false && x.CustomerId == order.CustomerId).ToListAsync();
-            string name = "Kho " + temp.Count();
+            string name = "Kho "+ temp.Count() + " - " + order.Customer.UserName ;
             var rentwarehouse = new RentWarehouse();
             rentwarehouse.CustomerId = order.CustomerId;
             rentwarehouse.StaffId = order.DeleteBy.ToString().ToLower();
