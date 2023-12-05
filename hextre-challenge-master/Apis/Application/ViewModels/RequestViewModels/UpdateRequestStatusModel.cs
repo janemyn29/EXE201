@@ -9,6 +9,7 @@ namespace Application.ViewModels.RequestViewModels
 {
     public class UpdateRequestStatusModel
     {
+
         public RequestStatus RequestStatus { get; set; }
     }
 }

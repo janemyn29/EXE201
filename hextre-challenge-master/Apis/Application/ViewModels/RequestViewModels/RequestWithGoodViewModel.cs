@@ -10,7 +10,7 @@ namespace Application.ViewModels.RequestViewModels
 
     public class RequestWithGoodViewModel
     {
-        public CreateRequestViewModel CreateRequestViewModel { get; set; }
-        public GoodCreateWithImage GoodCreateWithImage { get; set; }
+        public CreateRequestWithRequestDetailViewModel CreateRequestWithRequestDetailViewModel { get; set; }
+        public IList<GoodCreateWithImage> GoodCreateWithImage { get; set; }
     }
 }
