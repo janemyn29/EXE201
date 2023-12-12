@@ -87,6 +87,7 @@ namespace Infrastructures.Mappers
             CreateMap<UpdateRequestViewModel, Request>().ReverseMap();
             CreateMap<RequestDetail, RequestDetailViewModel>().ReverseMap();
             CreateMap<CreateRequestDetailViewModel, RequestDetail>().ReverseMap();
+            CreateMap<CreateRequestWithRequestDetailViewModel, Request>().ReverseMap();
             CreateMap<UpdateRequestDetailViewModel, RequestDetail>().ReverseMap();
             CreateMap<ServicePayment, ServiceModel>().ReverseMap();
             CreateMap<RequestWithGoodViewModel, UpdateRequestStatusModel>().ReverseMap(); ;
