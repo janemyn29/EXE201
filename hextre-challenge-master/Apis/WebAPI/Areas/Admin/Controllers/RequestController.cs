@@ -66,11 +66,43 @@ namespace WebAPI.Areas.Admin.Controllers
         {
             try
             {
-                var result = await _requestService.UpdateRequest(updateRequestViewModel);
-                return Ok(new
+                var req = await _context.Request.Where(x => x.Id == updateRequestViewModel.Id && !x.IsDeleted).AsNoTracking().FirstOrDefaultAsync();
+                if (req == null)
                 {
-                    Reuslt = "Cập nhật thành công."
-                });
+                    return BadRequest("Không tìm thấy yêu cầu!");
+                }
+                else
+                {
+                    if (updateRequestViewModel.RequestStatus == RequestStatus.Complete)
+                    {
+                        req.CompleteDate = DateTime.Now;
+                        req.RequestStatus = RequestStatus.Complete;
+                        var details = await _context.RequestDetail.AsNoTracking().Where(x => x.RequestId == req.Id && !x.IsDeleted).ToListAsync();
+                        foreach (var item in details)
+                        {
+                            var good = await _context.Good.AsNoTracking().FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == item.GoodId);
+                            if (req.RequestType == RequestType.PickUp)
+                            {
+                                good.Quantity = good.Quantity - item.Quantity;
+                            }
+                            else
+                            {
+                                good.Quantity = good.Quantity + item.Quantity;
+                            }
+
+                            _context.Good.Update(good);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    else if (updateRequestViewModel.RequestStatus == RequestStatus.Canceled)
+                    {
+                        req.DenyReason = "Yêu cầu đã bị nhân viên từ chối!";
+                        req.RequestStatus = RequestStatus.Canceled;
+                    }
+                    _context.Request.Update(req);
+                    await _context.SaveChangesAsync();
+                    return Ok("Cập nhật trạng thái yêu cầu thành công!");
+                }
             }
             catch (Exception ex)
             {

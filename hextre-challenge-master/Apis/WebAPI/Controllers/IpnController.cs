@@ -88,18 +88,18 @@ namespace WebAPI.Controllers
                 if (momo.resultCode == 0)
                 {
                     order.PaymentStatus = Domain.Enums.PaymentStatus.Success;
-                }
-                else
-                {
-                    order.PaymentStatus = Domain.Enums.PaymentStatus.Fail;
-                    order.CancelReason = "Khách hàng không tiến hành thanh toán!";
-
                     var note = new Notification();
                     note.ApplicationUserId = order.CustomerId;
                     note.IsRead = false;
                     note.Title = "Thanh toán thành công";
                     note.Description = "Bạn vừa thanh toán đơn hàng thành công! Warehouse Bridge sẽ sớm liên hệ với bạn để tiến hành lên lịch nhận gửi hàng. Cảm ơn bạn đã luôn tin tưởng Warehouse Bridge!";
                     await _unit.NoteRepository.AddAsync(note);
+                    order.OrderStatus = Domain.Enums.OrderStatus.Processing;
+                }
+                else
+                {
+                    order.PaymentStatus = Domain.Enums.PaymentStatus.Fail;
+                    order.CancelReason = "Khách hàng không tiến hành thanh toán!";
                     var warehouse = await _unit.WarehouseDetailRepository.GetByIdAsync(order.WarehouseDetailId);
                     warehouse.Quantity++;
                     _unit.WarehouseDetailRepository.Update(warehouse);

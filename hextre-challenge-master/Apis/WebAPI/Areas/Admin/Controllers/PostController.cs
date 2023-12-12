@@ -4,6 +4,7 @@ using Application.ViewModels.PostViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Pkcs;
+using System.Net.WebSockets;
 
 namespace WebAPI.Areas.Admin.Controllers
 {
@@ -24,6 +25,15 @@ namespace WebAPI.Areas.Admin.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPost(Guid id)
+        {
+        
+            var result = await _postService.GetPost();
+            var temp = result.FirstOrDefault(x => x.Id == id);   
+            return Ok(temp);
+        }
         [HttpPost]
         [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> CreatePost(CreatePostViewModel createPostViewModel)

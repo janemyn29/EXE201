@@ -29,7 +29,6 @@ namespace WebAPI.Areas.Admin.Controllers
             var orders = await _context.Transaction.Include(x=>x.ServicePayment).ThenInclude(x=>x.Contract.Customer).AsNoTracking().Where(x => x.IsDeleted == false).OrderBy(x => x.CreationDate).ToListAsync();
             foreach (var item in orders)
             {
-                item.ServicePayment = null;
                 item.ServicePayment.Contract.ServicePayments = null;
                 item.ServicePayment.Contract.Customer.Contracts = null;
             }

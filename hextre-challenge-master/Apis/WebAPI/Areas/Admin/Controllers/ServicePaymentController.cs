@@ -26,10 +26,11 @@ namespace WebAPI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var payments = await _context.ServicePayment.Include(x => x.Contract).Where(x => !x.IsDeleted).ToListAsync();
+            var payments = await _context.ServicePayment.Include(x => x.Contract).ThenInclude(x=>x.Customer).Where(x => !x.IsDeleted).ToListAsync();
             foreach (var item in payments)
             {
                 item.Contract.ServicePayments = null;
+                item.Contract.Customer.Contracts = null;
             }
             return Ok(payments);
         }

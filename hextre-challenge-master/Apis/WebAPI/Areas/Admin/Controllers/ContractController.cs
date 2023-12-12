@@ -29,7 +29,7 @@ namespace WebAPI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var list = await _context.Contract.Where(x => x.IsDeleted == false).Include(x => x.Customer).Include(x => x.ServicePayments).Include(x => x.RentWarehouse).ToListAsync();
+            var list = await _context.Contract.Include(x => x.Customer).Include(x => x.ServicePayments).Include(x => x.RentWarehouse).Where(x => x.IsDeleted == false).OrderByDescending(x=>x.EndTime).ToListAsync();
             foreach (var item in list)
             {
                 item.Customer.Contracts = null;
@@ -95,22 +95,28 @@ namespace WebAPI.Areas.Admin.Controllers
         [NonAction]
         public async Task<Guid> CreateRenthouse(Guid orderId)
         {
-            var order = await _context.Order.AsNoTracking().Include(x=>x.Customer).FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == orderId && x.OrderStatus == Domain.Enums.OrderStatus.Processing && x.PaymentStatus == PaymentStatus.Success);
+            var order = await _context.Order.Include(x => x.WarehouseDetail).ThenInclude(x => x.Warehouse).Include(x=>x.Customer).AsNoTracking().Where(x => x.IsDeleted == false && x.Id == orderId).FirstOrDefaultAsync();
+
+
             if (order == null)
             {
-                throw new Exception("Không tìm thấy đơn hàng bạn yêu cầu hoặc đơn hàng chưa được hoàn thành việc thanh toán!");
+                throw new Exception("Không tìm thấy đơn hàng bạn yêu cầu!");
             }
-            if (order.DeleteBy == null)
+            /*            if (order.DeleteBy == null)
+                        {
+                            throw new Exception("Đơn hàng này chưa được giao cho nhân viên quản lý!");
+                        }*/
+            if (order.PaymentStatus != PaymentStatus.Success || order.OrderStatus == OrderStatus.Cancelled)
             {
-                throw new Exception("Đơn hàng này chưa được giao cho nhân viên quản lý!");
+                throw new Exception("Đơn hàng không đủ điều kiện để tạo hợp đồng!");
             }
             var temp = await _context.RentWarehouse.Where(x => x.IsDeleted == false && x.CustomerId == order.CustomerId).ToListAsync();
-            string name = "Kho "+ temp.Count() + " - " + order.Customer.UserName ;
+            string name = "Kho "+ (temp.Count()+1)+ " - " + order.Customer.UserName ;
             var rentwarehouse = new RentWarehouse();
             rentwarehouse.CustomerId = order.CustomerId;
             rentwarehouse.StaffId = order.DeleteBy.ToString().ToLower();
             rentwarehouse.Information = name;
-            rentwarehouse.RentStatus = Domain.Enums.RentStatus.Pending;
+            rentwarehouse.RentStatus = Domain.Enums.RentStatus.Processing;
             await _context.RentWarehouse.AddAsync(rentwarehouse);
 
             await _context.SaveChangesAsync();
@@ -120,14 +126,19 @@ namespace WebAPI.Areas.Admin.Controllers
         [NonAction]
         public async Task CreateContract(ContractViewModel model, Guid rentwarehouse)
         {
-            var order = await _context.Order.Include(x => x.WarehouseDetail).ThenInclude(x => x.Warehouse).AsNoTracking().FirstOrDefaultAsync(x => x.IsDeleted == false && x.PaymentStatus == PaymentStatus.Success && x.Id == model.OrderId && x.OrderStatus == Domain.Enums.OrderStatus.Processing);
+            var order = await _context.Order.Include(x => x.WarehouseDetail).ThenInclude(x => x.Warehouse).AsNoTracking().Where(x => x.IsDeleted == false &&  x.Id == model.OrderId ).FirstOrDefaultAsync();
+
+
             if (order == null)
             {
                 throw new Exception("Không tìm thấy đơn hàng bạn yêu cầu!");
             }
-            if (order.DeleteBy == null)
+/*            if (order.DeleteBy == null)
             {
                 throw new Exception("Đơn hàng này chưa được giao cho nhân viên quản lý!");
+            }*/
+            if(order.PaymentStatus != PaymentStatus.Success  || order.OrderStatus == OrderStatus.Cancelled) {
+                throw new Exception("Đơn hàng không đủ điều kiện để tạo hợp đồng!");
             }
             if (model.StartTime < DateTime.Now || model.EndTime < DateTime.Now)
             {

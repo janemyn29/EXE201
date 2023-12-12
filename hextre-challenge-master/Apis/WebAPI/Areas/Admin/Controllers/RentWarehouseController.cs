@@ -23,7 +23,7 @@ namespace WebAPI.Areas.Admin.Controllers
         public async Task<IActionResult> Get()
         {
            
-            var list = await _context.RentWarehouse.Where(x => x.IsDeleted == false ).ToListAsync();
+            var list = await _context.RentWarehouse.Where(x => x.IsDeleted == false ).OrderByDescending(x=>x.CreationDate).ToListAsync();
             return Ok(list);
         }
 

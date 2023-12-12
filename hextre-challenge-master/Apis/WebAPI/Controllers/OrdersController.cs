@@ -44,7 +44,13 @@ namespace WebAPI.Controllers
         public async Task<ActionResult> GetOrder()
         {
             var id = _claimsService.GetCurrentUserId.ToString();
-            var orders = await _context.Order.AsNoTracking().Where(x => x.IsDeleted == false && x.CustomerId.ToLower().Equals(id.ToLower())).ToListAsync();
+            var orders = await _context.Order.AsNoTracking().Include(x => x.Customer).Include(x => x.WarehouseDetail).ThenInclude(x => x.Warehouse).Where(x => x.IsDeleted == false && x.CustomerId.ToLower().Equals(id.ToLower())).ToListAsync();
+            foreach (var item in orders)
+            {
+                item.Customer.OrderDetail = null;
+                item.WarehouseDetail.Orders = null;
+                item.WarehouseDetail.Warehouse.WarehouseDetails = null;
+            }
             var result = _mapper.Map<IList<OrderViewModel>>(orders);
             return Ok(result);
         }

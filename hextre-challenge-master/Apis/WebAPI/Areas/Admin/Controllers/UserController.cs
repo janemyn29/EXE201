@@ -132,7 +132,6 @@ namespace WebAPI.Areas.Admin.Controllers
             }
             else
             {
-
                 ErrorViewModel errors = new ErrorViewModel();
                 errors.Errors = new List<string>();
                 errors.Errors.AddRange(result.Errors.Select(x => x.ErrorMessage));

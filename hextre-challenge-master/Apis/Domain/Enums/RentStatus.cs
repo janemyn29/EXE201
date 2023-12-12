@@ -8,7 +8,7 @@ namespace Domain.Enums
 {
     public enum RentStatus
     {
-        Pending = 1,
+        Processing = 1,
         Expried = 2
     }
 }

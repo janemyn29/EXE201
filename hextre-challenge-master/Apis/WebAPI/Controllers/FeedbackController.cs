@@ -33,6 +33,10 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get() {
             var list = await _dbContext.Feedback.Include(x=>x.ApplicationUser).Where(x => x.IsDeleted == false).OrderByDescending(x => x.CreationDate).ToListAsync();
+            foreach (var item in list)
+            {
+                item.ApplicationUser.Feedbacks = null;
+            }
             return Ok(list);
         }
 
@@ -52,8 +56,8 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Post(Guid warehouseId,FeedbackCreateModel model)
         {
             var userId = _claimsService.GetCurrentUserId.ToString().ToLower();
-            var order = await _dbContext.Order.Include(x => x.WarehouseDetail).Where(x => x.WarehouseDetail.WarehouseId == warehouseId && x.IsDeleted == false && x.OrderStatus == Domain.Enums.OrderStatus.Complete).ToListAsync();
-            if(order ==null ||order.Count == 0)
+            var order = await _dbContext.Order.Include(x => x.WarehouseDetail).Where(x => x.WarehouseDetail.WarehouseId == warehouseId && x.IsDeleted == false && x.OrderStatus != Domain.Enums.OrderStatus.Cancelled).ToListAsync();
+            if(order == null ||order.Count == 0)
             {
                 return BadRequest("Vui lòng đặt kho và hoàn thành quá trình thanh toán và ký hợp đồng trước khi gửi đánh giá!");
             }
